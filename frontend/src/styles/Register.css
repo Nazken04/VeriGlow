@@ -1,0 +1,184 @@
+.register-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #A1D6E2; /* Light Teal - Page Background */
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  display: flex;
+  width: 920px;
+  background-color: #F1F1F2; /* Light Gray - Card Background */
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(25, 149, 173, 0.15); /* softened teal shadow */
+}
+
+.info-section {
+  width: 45%;
+  background-color: #A1D6E2; /* Light Teal background */
+  color: #1995AD; /* Primary Teal text */
+  padding: 60px 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid #1995AD; /* Primary Teal border */
+}
+
+.info-section h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  color: #1995AD; /* Primary Teal heading */
+}
+
+.info-section p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  color: #1995AD; /* Primary Teal text */
+}
+
+.info-section button {
+  padding: 10px 24px;
+  border: 2px solid #1995AD; /* Primary Teal border */
+  background-color: transparent;
+  color: #1995AD; /* Primary Teal text */
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.info-section button:hover {
+  background-color: #1995AD; /* Primary Teal bg on hover */
+  color: #F1F1F2; /* Light Gray text on hover */
+}
+
+.form-section {
+  width: 55%;
+  padding: 60px 45px;
+  background-color: #F1F1F2; /* Light Gray background */
+}
+
+.form-section h2 {
+  font-size: 22px;
+  color: #1995AD; /* Primary Teal heading */
+  margin-bottom: 28px;
+  font-weight: 700;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #1995AD; /* Primary Teal labels */
+}
+
+form input {
+  padding: 12px;
+  border: 1px solid #A1D6E2; /* Light Teal border */
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background-color: #F1F1F2; /* Light Gray input background */
+  color: #1995AD; /* Primary Teal text */
+  transition: 0.2s ease-in-out;
+}
+
+form input:focus {
+  border-color: #1995AD; /* Primary Teal focus */
+  box-shadow: 0 0 0 3px rgba(161, 214, 226, 0.4); /* Light Teal glow */
+}
+
+button[type="submit"] {
+  background-color: #1995AD; /* Primary Teal button */
+  color: #F1F1F2; /* Light Gray text */
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #A1D6E2; /* Light Teal hover */
+  color: #1995AD; /* Primary Teal text on hover */
+}
+
+.form-section p {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #1995AD; /* Primary Teal text */
+}
+
+a {
+  color: #1995AD; /* Primary Teal links */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #A1D6E2; /* Light Teal hover links */
+}
+
+.password-mismatch {
+  color: #1995AD; /* Primary Teal (use carefully for errors) */
+  font-size: 13px;
+  margin-top: -12px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Responsive grid adjustments */
+@media screen and (min-width: 768px) {
+  form {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  form > div:nth-child(1),
+  form > div:nth-child(2),
+  form > div:nth-child(3) {
+    grid-column: span 2;
+  }
+
+  button[type="submit"] {
+    grid-column: span 2;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    width: 90%;
+    border-radius: 12px;
+  }
+
+  .info-section,
+  .form-section {
+    width: 100%;
+    padding: 40px 25px;
+    border-right: none;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+  }
+}

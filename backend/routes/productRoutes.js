@@ -11,4 +11,6 @@ router.post('/verify', authMiddleware, productController.verifyProduct);
 
 router.get('/manufacturer/reports', authMiddleware, productController.getManufacturerReports);
 
+router.get('/manufacturer/products', authMiddleware, productController.getManufacturerProducts)
+router.get('/batch/:batchNumber', authMiddleware, productController.getProductsByBatchNumber);
 module.exports = router;

@@ -1,0 +1,251 @@
+/* FraudReports.css */
+
+/* Color Palette (Consistent) */
+
+.fraud-reports-container {
+  width: 95%; /* Allow it to be responsive below max-width */
+  margin: 0 auto 40px auto; /* 0 top (assuming filters above handle top margin), auto horizontal, bottom margin */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 25px 30px;
+  border-radius: 12px;
+  color: #343A40;
+  box-sizing: border-box;
+}
+
+.fraud-reports-container h1 { /* "Fraud Reports" title */
+  font-weight: 600;
+  font-size: 22px; /* Slightly adjusted size */
+  margin-top: 0; /* Assuming it's the first thing in this container */
+  margin-bottom: 25px;
+  color: #17A2B8;
+  text-align: center;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 15px;
+  color: #6C757D;
+  margin: 30px 0; /* More prominent margin */
+}
+
+.error-text {
+  text-align: center;
+  color: #721C24;
+  font-weight: 500;
+  margin: 20px auto; /* Centered */
+  padding: 12px 15px;
+  background-color: #F8D7DA;
+  border: 1px solid #F5C6CB;
+  border-radius: 6px;
+  max-width: 80%; /* Prevent error message from being too wide */
+}
+
+.reports-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-size: 13px; /* Slightly smaller base font for table */
+  margin-top: 10px; /* Reduced margin if h1 is directly above */
+  table-layout: fixed;
+}
+
+.reports-table thead th {
+  text-align: left;
+  padding: 12px 15px;
+  background-color: #E9ECEF;
+  color: #495057;
+  font-weight: 600;
+  font-size: 14px; /* Header font slightly larger than body */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 2px solid #DEE2E6;
+}
+
+.reports-table thead th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.reports-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
+
+/* Column width definitions (adjust as needed) */
+.reports-table th:nth-child(1), .reports-table td:nth-child(1) { width: 8%; } /* Image */
+.reports-table th:nth-child(2), .reports-table td:nth-child(2) { width: 12%; } /* QR/Barcode */
+.reports-table th:nth-child(3), .reports-table td:nth-child(3) { width: 13%; } /* Product Name */
+.reports-table th:nth-child(4), .reports-table td:nth-child(4) { width: 12%; } /* Batch */
+.reports-table th:nth-child(5), .reports-table td:nth-child(5) { width: 7%; }  /* Manufactured */
+.reports-table th:nth-child(6), .reports-table td:nth-child(6) { width: 7%; }  /* Expiry */
+.reports-table th:nth-child(7), .reports-table td:nth-child(7) { width: 8%; }  /* Reported Scans */
+.reports-table th:nth-child(8), .reports-table td:nth-child(8) { width: 10%; } /* Detected At */
+.reports-table th.column-reported-locations,
+.reports-table td.cell-reported-locations {
+  width: 11.5%;
+}
+.reports-table th.column-scan-activity,
+.reports-table td.cell-scan-activity {
+  width: 11.5%;
+}
+
+
+.reports-table tbody tr {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
+}
+
+.reports-table tbody tr:hover:not(.expanded-row) {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
+  transform: translateY(-2px);
+}
+
+.reports-table tbody tr.expanded-row {
+  box-shadow: 0 8px 20px rgba(23, 162, 184, 0.15);
+}
+
+.reports-table tbody td {
+  padding: 10px 12px; /* Slightly reduced padding for more compactness */
+  vertical-align: middle; /* Align text vertically middle */
+  color: #495057;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  border-bottom: none; /* Removed for card style with border-spacing */
+}
+.reports-table tbody tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.reports-table tbody tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.product-image {
+  width: 80px; /* Further reduced */
+  height: 60px; /* Further reduced */
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #DEE2E6;
+  display: block;
+  margin: auto; /* Center image in its cell */
+}
+
+.no-image {
+  width: 80px;
+  height: 60px;
+  background-color: #E9ECEF;
+  color: #6C757D;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  font-size: 11px;
+  font-style: italic;
+  border: 1px solid #DEE2E6;
+  margin: auto; /* Center in its cell */
+}
+
+.expandable-content {
+  margin: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: 12px; /* Smaller for expanded details */
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.5; /* Increased for readability of multi-line */
+  color: #343A40;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+  .fraud-reports-container {
+    padding: 20px 15px;
+  }
+  .reports-table {
+    border-spacing: 0;
+    table-layout: auto;
+  }
+  .reports-table thead {
+    display: none;
+  }
+  .reports-table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    background-color: #FFFFFF;
+    padding: 10px 15px;
+    cursor: default;
+  }
+   .reports-table tbody tr:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  }
+  .reports-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #E9ECEF;
+    text-align: right;
+    width: 100% !important;
+  }
+  .reports-table tbody tr td:last-child {
+    border-bottom: none;
+  }
+  .reports-table tbody td[data-label]::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #17A2B8;
+    margin-right: 10px;
+    text-align: left;
+    flex-basis: 40%;
+    flex-shrink: 0;
+  }
+  .reports-table tbody td[data-label] > *:first-child,
+  .reports-table tbody td[data-label] .expandable-content {
+    flex-basis: 60%;
+    text-align: left;
+    color: #343A40;
+  }
+  .expandable-content {
+    font-size: 12px;
+  }
+  .reports-table tbody td[data-label="Image"] {
+    justify-content: center;
+    padding-bottom: 15px;
+  }
+  .reports-table tbody td[data-label="Image"]::before {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+    .fraud-reports-container {
+        width: 100%; /* Take full width on very small screens */
+        padding: 15px 10px; /* Reduce padding further */
+        margin: 0 auto 20px auto;
+        border-radius: 0; /* Optional: remove radius for edge-to-edge feel */
+    }
+    .fraud-reports-container h1 {
+      font-size: 20px;
+    }
+    .reports-table tbody td[data-label]::before {
+        flex-basis: 100%;
+        margin-bottom: 6px;
+    }
+    .reports-table tbody td {
+        flex-direction: column;
+        text-align: left;
+        align-items: flex-start;
+    }
+     .reports-table tbody td[data-label] > *:first-child,
+     .reports-table tbody td[data-label] .expandable-content {
+        flex-basis: auto;
+        width: 100%;
+    }
+}

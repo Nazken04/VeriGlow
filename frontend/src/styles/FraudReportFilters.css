@@ -1,0 +1,246 @@
+/* FraudReportFilters.css */
+
+/* Color Palette (consistent with FraudReports.css)
+  --primary-accent: #17A2B8; (Info Blue / Muted Teal)
+  --primary-accent-dark: #138496;
+  --bg-container-filters: #FFFFFF;
+  --bg-input: #F8F9FA;
+  --text-dark: #343A40;
+  --text-medium: #495057;
+  --text-light-label: #6C757D;
+  --border-color: #CED4DA;
+  --border-color-light: #DEE2E6;
+  --focus-shadow-color: rgba(23, 162, 184, 0.25);
+  --btn-secondary-bg: #E9ECEF;
+  --btn-secondary-text: #495057;
+  --btn-secondary-border: #CED4DA;
+  --btn-pdf-bg: #DC3545;
+  --btn-pdf-hover: #C82333;
+  --btn-excel-bg: #28A745;
+  --btn-excel-hover: #218838;
+*/
+
+.fraud-filters-container {
+  background-color: #FFFFFF;
+  padding: 20px 25px; /* Adjusted padding */
+  margin: 20px auto 30px auto; /* Top margin, auto horizontal, bottom margin */
+  border-radius: 10px; /* Slightly larger radius for a softer look */
+  border: 1px solid #E0E0E0; /* Softer border */
+  color: #343A40;
+  box-sizing: border-box;
+}
+
+.fraud-filters-container h3 { /* "Filter Reports" title */
+  text-align: center;
+  color: #17A2B8;
+  margin-top: 0;
+  margin-bottom: 25px; /* More space below title */
+  font-size: 20px; /* Slightly larger */
+  font-weight: 600;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  gap: 20px; /* Gap between rows of inputs if they wrap, and between inputs and actions */
+  align-items: flex-end; /* Align items to the bottom */
+}
+
+.filter-inputs-wrapper { /* New wrapper for date and search inputs */
+  display: flex;
+  flex-wrap: wrap; /* Allow inputs themselves to wrap if needed on smaller screens */
+  gap: 18px; /* Gap between individual input groups */
+  flex-grow: 1; /* Allow this wrapper to take available space */
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 200px; /* Grow, shrink, basis for date inputs */
+  min-width: 180px; /* Prevent date inputs from becoming too small */
+}
+
+.filter-group-search {
+  flex: 2 1 300px; /* Allow search to be wider, min-width if needed */
+  min-width: 250px;
+}
+
+.filter-group label {
+  font-weight: 500;
+  font-size: 13px;
+  color: #6C757D;
+  margin-bottom: 2px;
+}
+
+.filter-group input[type="date"],
+.filter-group input[type="text"] {
+  padding: 9px 12px; /* Slightly adjusted padding */
+  border: 1px solid #CED4DA;
+  border-radius: 6px;
+  background-color: #F8F9FA;
+  color: #495057;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 40px; /* Consistent height */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Specific styling for date input placeholder text if possible (browser dependent) */
+.filter-group input[type="date"]::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #999;
+}
+.filter-group input[type="date"]::-moz-placeholder { /* Firefox 19+ */
+  color: #999;
+  opacity: 1;
+}
+.filter-group input[type="date"]:-ms-input-placeholder { /* IE 10+ */
+  color: #999;
+}
+.filter-group input[type="date"]:-moz-placeholder { /* Firefox 18- */
+  color: #999;
+  opacity: 1;
+}
+
+
+.filter-group input[type="date"]:focus,
+.filter-group input[type="text"]:focus {
+  outline: none;
+  border-color: #17A2B8;
+  box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+}
+
+.filter-actions { /* Container for "Apply" and "Clear" buttons */
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 10px; /* Space between Apply and Clear */
+  flex-shrink: 0; /* Prevent this column from shrinking */
+  /* margin-left: auto; Removed, now part of the main flex wrap */
+}
+
+.filter-btn, .export-btn {
+  padding: 0 18px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  font-size: 14px;
+  height: 40px; /* Match input height */
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-width: 130px; /* Ensure buttons have a decent minimum width */
+}
+
+.filter-btn.apply-btn {
+  background-color: #17A2B8;
+  color: white;
+  border-color: #17A2B8;
+}
+.filter-btn.apply-btn:hover {
+  background-color: #138496;
+  border-color: #138496;
+}
+
+.filter-btn.clear-btn {
+  background-color: #F8F9FA; /* Lighter background */
+  color: #495057;
+  border: 1px solid #CED4DA; /* Visible border */
+}
+.filter-btn.clear-btn:hover {
+  background-color: #E9ECEF;
+  border-color: #ADB5BD;
+}
+
+.export-actions {
+  margin-top: 25px; /* More space above export buttons */
+  padding-top: 20px;
+  border-top: 1px solid #E9ECEF; /* Lighter divider */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Increased gap for better separation */
+  justify-content: center;
+}
+
+.export-btn.pdf-btn,
+.export-btn.excel-btn {
+    min-width: 160px; /* Make export buttons a bit wider */
+    font-weight: 500;
+}
+
+.export-btn.pdf-btn {
+  background-color: #DC3545;
+  color: white;
+  border-color: #DC3545;
+}
+.export-btn.pdf-btn:hover {
+  background-color: #C82333;
+  border-color: #BD2130;
+}
+
+.export-btn.excel-btn {
+  background-color: #28A745;
+  color: white;
+  border-color: #28A745;
+}
+.export-btn.excel-btn:hover {
+  background-color: #218838;
+  border-color: #1E7E34;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .filter-form {
+    /* Inputs and actions might start stacking more vertically */
+  }
+  .filter-inputs-wrapper {
+    /* Could make inputs take full width sooner if needed */
+  }
+}
+
+@media (max-width: 768px) {
+  .fraud-filters-container {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  .filter-form {
+    flex-direction: column; /* Stack input wrapper and actions */
+    align-items: stretch; /* Make children take full width */
+    gap: 15px;
+  }
+  .filter-inputs-wrapper {
+    gap: 15px; /* Gap between stacked input groups */
+  }
+  .filter-group, .filter-group-search {
+    flex-basis: auto; /* Reset basis for full width stacking */
+    min-width: 0; /* Reset min-width */
+  }
+  .filter-actions {
+    flex-direction: row; /* Buttons side-by-side again */
+    gap: 10px;
+    width: 100%; /* Take full width */
+  }
+  .filter-actions .filter-btn {
+    flex-grow: 1; /* Allow Apply/Clear to share width */
+  }
+  .export-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .export-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-actions {
+    flex-direction: column; /* Stack Apply/Clear on very small screens */
+  }
+  .filter-actions .filter-btn {
+    width: 100%;
+  }
+}
