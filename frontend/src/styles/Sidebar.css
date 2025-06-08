@@ -1,0 +1,95 @@
+/* src/styles/Sidebar.css */
+.sidebar-container {
+    width: 260px; /* Standard sidebar width */
+    height: 100vh;
+    background-color: var(--white-color);
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100; /* High z-index */
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease; /* For potential future collapse */
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebar-brand {
+    padding: var(--spacing-md) var(--spacing-lg);
+    height: 64px; /* Match Navbar height */
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-brand a {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-decoration: none;
+    gap: var(--spacing-xs);
+}
+
+.sidebar-brand .logo-icon {
+    font-size: 1.75rem;
+    color: var(--primary-color);
+}
+
+.sidebar-brand .brand-text {
+    /* Styles for text, visibility can be toggled on collapse */
+}
+
+.sidebar-nav {
+    flex-grow: 1; /* Allows nav to take up space */
+    padding: var(--spacing-md) 0;
+    overflow-y: auto; /* Scroll if many links */
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0 var(--spacing-md); /* Padding around the list */
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    color: var(--text-secondary-color);
+    font-size: 0.9375rem; /* 15px */
+    font-weight: 500;
+    transition: all var(--transition-fast);
+}
+
+.sidebar-nav a:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--text-color);
+}
+
+.sidebar-nav a.active {
+    background-color: var(--primary-extra-light);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.sidebar-nav a .material-symbols-outlined {
+    font-size: 1.25rem; /* 20px */
+}
+
+/* Responsive Sidebar (e.g., collapse or hide) */
+@media (max-width: 768px) {
+    .sidebar-container {
+        width: 0; /* Hide sidebar on mobile */
+        overflow: hidden;
+        border-right: none;
+        /* You would add a toggle button and logic to show it as an overlay */
+    }
+}

@@ -12,4 +12,8 @@ router.post('/login', authController.login);
 
 router.get('/profile', authMiddleware, authController.profile);
 
+
+router.get('/verify-email/:token', authController.verifyEmail); // NEW: Email verification route
+router.post('/resend-verification', authController.resendVerificationEmail); // NEW: Resend verification route
+
 module.exports = router;

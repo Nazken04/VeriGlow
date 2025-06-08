@@ -1,0 +1,118 @@
+/* src/styles/VerificationPage.css */
+
+.verification-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%); /* Example gradient */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.verification-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    transform: translateY(-20px); /* Lift slightly for effect */
+    animation: fadeInSlideUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.verification-card .material-symbols-outlined {
+    font-size: 72px;
+    margin-bottom: 20px;
+}
+
+.verification-card .success-icon {
+    color: #4CAF50; /* Green for success */
+}
+
+.verification-card .error-icon {
+    color: #F44336; /* Red for error */
+}
+
+.verification-card .loading-icon {
+    color: #2196F3; /* Blue for loading */
+    animation: spin 2s linear infinite; /* Simple spin animation for loading */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.verification-title {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.verification-subtitle {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.verification-link {
+    display: inline-block;
+    background-color: #2575fc;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.verification-link:hover {
+    background-color: #6a11cb;
+    transform: translateY(-2px);
+}
+
+.verification-error-title {
+    color: #F44336;
+}
+
+.verification-error-text {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.verification-suggestion {
+    font-size: 14px;
+    color: #777;
+    margin-top: 15px;
+    line-height: 1.4;
+}
+
+/* Optional: Adjust for smaller screens */
+@media (max-width: 600px) {
+    .verification-card {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+    .verification-title {
+        font-size: 24px;
+    }
+    .verification-subtitle {
+        font-size: 15px;
+    }
+}

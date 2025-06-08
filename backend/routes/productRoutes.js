@@ -13,4 +13,5 @@ router.get('/manufacturer/reports', authMiddleware, productController.getManufac
 
 router.get('/manufacturer/products', authMiddleware, productController.getManufacturerProducts)
 router.get('/batch/:batchNumber', authMiddleware, productController.getProductsByBatchNumber);
+
 module.exports = router;

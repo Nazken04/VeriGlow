@@ -1,50 +1,64 @@
-import { toast } from 'react-toastify'; // For displaying success/error notifications
-import BASE_URL from '../../config'; // Import the BASE_URL from config
-import { registerUserAPI, loginUserAPI, forgotPasswordAPI, resetPasswordAPI, getUserProfileAPI, updateUserProfileAPI } from '../../api/auth'; // Import API functions
+// src/redux/actions/authActions.js
+import { toast } from 'react-toastify';
 import {
-  LOGOUT_USER // Make sure this type is defined and imported
+  registerUserAPI,
+  loginUserAPI, // This is key
+  forgotPasswordAPI,
+  resetPasswordAPI,
+  getUserProfileAPI, // This is key
+  updateUserProfileAPI,
+  verifyEmailAPI,
+  resendVerificationEmailAPI
+} from '../../api/auth';
+import {
+  LOGOUT_USER,
+  REGISTER_SUCCESS, REGISTER_FAILURE,
+  LOGIN_SUCCESS, LOGIN_FAILURE,
+  FORGOT_PASSWORD_SUCCESS, FORGOT_PASSWORD_FAILURE,
+  RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAILURE,
+  UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCESS, UPDATE_PROFILE_FAILURE,
+  USER_PROFILE_SUCCESS, USER_PROFILE_FAILURE,
+  VERIFY_EMAIL_REQUEST, VERIFY_EMAIL_SUCCESS, VERIFY_EMAIL_FAILURE,
+  RESEND_VERIFICATION_REQUEST, RESEND_VERIFICATION_SUCCESS, RESEND_VERIFICATION_FAILURE,
+  CLEAR_AUTH_ERROR, CLEAR_AUTH_MESSAGE,
+  GET_PROFILE_REQUEST
 } from './types';
+
 // Action for registering a new user
-export const registerUser = (userData, navigate) => {
+export const registerUser = (userData) => {
   return async (dispatch) => {
     try {
       const response = await registerUserAPI(userData);
-      dispatch({ type: 'REGISTER_SUCCESS', payload: response });
-      toast.success('Registration successful!');
-      navigate('/login');
+      dispatch({ type: REGISTER_SUCCESS, payload: response.message });
+      toast.success(response.message);
     } catch (err) {
-      dispatch({ type: 'REGISTER_FAILURE', payload: err });
-      toast.error(err.message || 'Registration failed! Please try again.');
+      const errorMessage = err.response?.data?.message || err.message || 'Registration failed! Please try again.';
+      dispatch({ type: REGISTER_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
     }
   };
 };
+
 export const logoutUser = () => (dispatch) => {
-  // 1. Remove the token from localStorage
   localStorage.removeItem('token');
-
-  // 2. Dispatch the LOGOUT_USER action to update the Redux state
   dispatch({ type: LOGOUT_USER });
-
-  // 3. Optionally, display a success message
-  toast.info('You have been logged out.'); // Using info for logout, success is also fine
-
-  // Note: Navigation to '/login' will be handled by the Navbar component
-  // or by a protected route wrapper that redirects if not authenticated.
-  // If you want to force navigation from here, you'd need to pass `navigate`
-  // similar to how you do in loginUser, but it's cleaner if components handle navigation.
+  toast.info('You have been logged out.');
 };
+
 // Action for logging in an existing user
-export const loginUser = (userData, navigate) => {
+// REMOVED `navigate` from parameters here
+export const loginUser = (userData) => { // No navigate parameter
   return async (dispatch) => {
     try {
       const response = await loginUserAPI(userData);
-      localStorage.setItem('token', response.token); // Store token in localStorage
-      dispatch({ type: 'LOGIN_SUCCESS', payload: response });
-      toast.success('Login successful!');
-      navigate('/dashboard');
+      localStorage.setItem('token', response.token);
+      dispatch({ type: LOGIN_SUCCESS, payload: response }); // payload: { token: "...", user: {basic_info} }
+      // We will toast and navigate FROM THE COMPONENT
     } catch (err) {
-      dispatch({ type: 'LOGIN_FAILURE', payload: err });
-      toast.error(err.message || 'Login failed! Please check your credentials.');
+      const errorMessage = err.response?.data?.message || err.message || 'Login failed! Please check your credentials.';
+      dispatch({ type: LOGIN_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
+      throw err; // Re-throw so component can catch and know login failed
     }
   };
 };
@@ -54,11 +68,12 @@ export const forgotPassword = (email) => {
   return async (dispatch) => {
     try {
       const response = await forgotPasswordAPI(email);
-      dispatch({ type: 'FORGOT_PASSWORD_SUCCESS', payload: response });
-      toast.success('Password reset link sent to your email!');
+      dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: response.message });
+      toast.success(response.message || 'Password reset link sent to your email!');
     } catch (err) {
-      dispatch({ type: 'FORGOT_PASSWORD_FAILURE', payload: err });
-      toast.error(err.message || 'Password reset failed! Please try again.');
+      const errorMessage = err.response?.data?.message || err.message || 'Password reset failed! Please try again.';
+      dispatch({ type: FORGOT_PASSWORD_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
     }
   };
 };
@@ -68,51 +83,94 @@ export const resetPassword = (token, newPassword) => {
   return async (dispatch) => {
     try {
       const response = await resetPasswordAPI(token, newPassword);
-      dispatch({ type: 'RESET_PASSWORD_SUCCESS', payload: response });
-      toast.success('Password reset successfully!');
+      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: response.message });
+      toast.success(response.message || 'Password reset successfully!');
     } catch (err) {
-      dispatch({ type: 'RESET_PASSWORD_FAILURE', payload: err });
-      toast.error(err.message || 'Password reset failed! Please try again.');
+      const errorMessage = err.response?.data?.message || err.message || 'Password reset failed! Please try again.';
+      dispatch({ type: RESET_PASSWORD_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
     }
   };
 };
 
-// Action for updating the user's profile
 // Action for updating the user's profile
 export const updateUserProfile = (updatedData) => {
   return async (dispatch) => {
-    dispatch({ type: 'UPDATE_PROFILE_REQUEST' });
+    dispatch({ type: UPDATE_PROFILE_REQUEST });
     try {
       const response = await updateUserProfileAPI(updatedData);
-      dispatch({ type: 'UPDATE_PROFILE_SUCCESS', payload: response.data });  // Make sure this uses response.data
-      toast.success("Profile updated successfully!"); // Display success toast
-
+      dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: response });
+      toast.success("Profile updated successfully!");
     } catch (error) {
-      dispatch({ type: 'UPDATE_PROFILE_FAILURE', payload: error.message || "An error occurred." }); // Provide a default error message
-      toast.error(error.message || "An error occurred."); // Display error toast
+      const errorMessage = error.response?.data?.message || error.message || "An error occurred.";
+      dispatch({ type: UPDATE_PROFILE_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
     }
   };
 };
-
-
-
 
 // Action for getting the current user's profile (after login)
 export const getUserProfile = () => {
   return async (dispatch) => {
-    const token = localStorage.getItem('token'); // Get token from localStorage
+    dispatch({ type: GET_PROFILE_REQUEST });
+    const token = localStorage.getItem('token');
     if (!token) {
-      dispatch({ type: 'USER_PROFILE_FAILURE', payload: 'Unauthorized, please log in.' });
+      dispatch({ type: USER_PROFILE_FAILURE, payload: 'Unauthorized, please log in.' });
       toast.error('Unauthorized, please log in.');
       return;
     }
 
     try {
-      const response = await getUserProfileAPI(token);
-      dispatch({ type: 'USER_PROFILE_SUCCESS', payload: response });
+      const response = await getUserProfileAPI(); // This API call is expected to return full user details
+      dispatch({ type: USER_PROFILE_SUCCESS, payload: response });
     } catch (err) {
-      dispatch({ type: 'USER_PROFILE_FAILURE', payload: err });
-      toast.error('Failed to load user profile.');
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to load user profile.';
+      dispatch({ type: USER_PROFILE_FAILURE, payload: errorMessage });
+      // Important: If profile fails to load (e.g., token invalid), ensure user is logged out
+      if (err.response?.status === 401 || err.response?.status === 403) {
+         localStorage.removeItem('token');
+         dispatch({ type: LOGOUT_USER }); // Dispatch logout to clear Redux state
+         toast.error("Your session has expired. Please log in again.");
+      } else {
+         toast.error(errorMessage);
+      }
     }
   };
 };
+
+// NEW: Action for verifying email
+export const verifyEmail = (token) => {
+  return async (dispatch) => {
+    dispatch({ type: VERIFY_EMAIL_REQUEST });
+    try {
+      const response = await verifyEmailAPI(token);
+      dispatch({ type: VERIFY_EMAIL_SUCCESS, payload: response.message });
+      toast.success(response.message);
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Email verification failed. Invalid or expired token.';
+      dispatch({ type: VERIFY_EMAIL_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
+    }
+  };
+};
+
+// NEW: Action for resending verification email
+export const resendVerificationEmail = (email) => {
+  return async (dispatch) => {
+    dispatch({ type: RESEND_VERIFICATION_REQUEST });
+    try {
+      const response = await resendVerificationEmailAPI(email);
+      dispatch({ type: RESEND_VERIFICATION_SUCCESS, payload: response.message });
+      toast.success(response.message);
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to resend verification email. Please try again.';
+      dispatch({ type: RESEND_VERIFICATION_FAILURE, payload: errorMessage });
+      toast.error(errorMessage);
+    }
+  };
+};
+
+// NEW: Action to clear auth messages
+export const clearAuthMessage = () => ({ type: CLEAR_AUTH_MESSAGE });
+// NEW: Action to clear auth errors
+export const clearAuthError = () => ({ type: CLEAR_AUTH_ERROR });
