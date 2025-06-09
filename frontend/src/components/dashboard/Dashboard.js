@@ -1,14 +1,11 @@
-// src/components/dashboard/Dashboard.js
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile } from '../../redux/actions/authActions';
 import { fetchManufacturerProducts } from '../../redux/actions/productActions';
-// Import the NEWLY CREATED fetchFraudReports action
 import { fetchFraudReports } from '../../redux/actions/fraudReportsActions'; 
 
 import '../../styles/Dashboard.css';
 
-// Helper to parse dates robustly (copied from previous iterations)
 const parseDateRobustly = (dateValue) => {
     if (!dateValue) return null;
     if (Number.isFinite(dateValue)) {
@@ -28,14 +25,12 @@ const parseDateRobustly = (dateValue) => {
     return !isNaN(fallbackDate.getTime()) ? fallbackDate : null;
 };
 
-// Helper to format dates (copied from previous iterations)
 const formatDate = (dateValue) => {
     const date = parseDateRobustly(dateValue);
     if (!date) return '-';
     return date.toLocaleDateString('en-GB');
 };
 
-// Helper to get expiry status (copied from previous iterations)
 const getExpiryStatus = (expiryDateString) => {
     const expiryDate = parseDateRobustly(expiryDateString);
     if (!expiryDate) return null;
@@ -57,22 +52,18 @@ const getExpiryStatus = (expiryDateString) => {
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-    // Select user profile
     const { user, loading: userLoading, error: userError } = useSelector((state) => state.auth);
-    // Select product batches (from product slice, assuming it has 'batches' array)
     const { batches, loading: productsLoading, error: productsError } = useSelector((state) => state.product);
-    // Select fraud reports from the NEW 'reports' slice
     const { allReportsWithDetails, loading: reportsLoading, error: reportsError } = useSelector((state) => state.reports);
 
     const [copiedKey, setCopiedKey] = useState(null);
 
-    // Fetch all necessary data on component mount
     useEffect(() => {
         if (!user) { 
             dispatch(getUserProfile());
         }
-        dispatch(fetchManufacturerProducts()); // Ensure product data is loaded
-        dispatch(fetchFraudReports()); // Dispatch the new fraud reports action
+        dispatch(fetchManufacturerProducts()); 
+        dispatch(fetchFraudReports()); 
     }, [dispatch, user]);
 
     const displayValue = (value) => value || '-';
@@ -89,9 +80,7 @@ const Dashboard = () => {
 
     const username = displayValue(user?.username || (user?.email ? user.email.split('@')[0] : null));
 
-    // --- Analytics Calculations (Memoized for performance) ---
     const analytics = useMemo(() => {
-        // Only calculate if both batches and allReportsWithDetails are available and not loading
         if (productsLoading || reportsLoading || !batches || !allReportsWithDetails) {
             return null; 
         }
@@ -119,14 +108,13 @@ const Dashboard = () => {
         const totalScans = allReportsWithDetails.reduce((sum, report) => sum + (report.report?.scanCount || 0), 0);
         const totalFraudReports = allReportsWithDetails.length;
 
-        // Get recently registered products (last 5)
         const recentlyRegistered = [...batches]
             .sort((a, b) => {
                 const dateA = parseDateRobustly(a.manufacturing_date)?.getTime() || 0;
                 const dateB = parseDateRobustly(b.manufacturing_date)?.getTime() || 0;
-                return dateB - dateA; // Sort descending by manufacturing date
+                return dateB - dateA; 
             })
-            .slice(0, 5); // Get top 5 recent
+            .slice(0, 5); 
 
         return {
             totalProductsRegistered: uniqueProducts.size,
@@ -138,12 +126,12 @@ const Dashboard = () => {
             expiredProductsCount,
             recentlyRegistered,
         };
-    }, [batches, allReportsWithDetails, productsLoading, reportsLoading]); // Recalculate when data or loading states change
+    }, [batches, allReportsWithDetails, productsLoading, reportsLoading]); 
 
     const isLoading = userLoading || productsLoading || reportsLoading;
     const hasError = userError || productsError || reportsError;
 
-    if (isLoading && (!user || !analytics)) { // Show loading state until user and analytics are loaded
+    if (isLoading && (!user || !analytics)) { 
         return (
             <div className="dashboard-page-container">
                 <div className="dashboard-status-message loading">Loading your profile and analytics...</div>
@@ -151,7 +139,7 @@ const Dashboard = () => {
         );
     }
 
-    if (hasError) { // Show error if any API call failed
+    if (hasError) { 
         return (
             <div className="dashboard-page-container">
                 <div className="dashboard-status-message error">Error loading data: {userError?.message || productsError?.message || reportsError?.message || 'An unexpected error occurred.'}</div>
@@ -159,7 +147,7 @@ const Dashboard = () => {
         );
     }
 
-    if (!user) { // If user profile is not loaded even after trying
+    if (!user) { 
         return (
             <div className="dashboard-page-container">
                 <div className="dashboard-status-message no-data">User profile not found. Please try logging in again.</div>
@@ -167,9 +155,7 @@ const Dashboard = () => {
         );
     }
     
-    // If analytics is still null after data is loaded (e.g., if batches/reports are empty arrays initially)
-    // or if a calculation dependency is missing (should be caught by useMemo dependencies now)
-    if (!analytics) { // This case should ideally not be hit if data is loaded and empty array handled by useMemo
+    if (!analytics) { 
         return (
              <div className="dashboard-page-container">
                 <div className="dashboard-status-message loading">Calculating analytics...</div>

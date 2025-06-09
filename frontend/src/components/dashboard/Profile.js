@@ -8,7 +8,6 @@ const Profile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Accessing user, loading, error, and message from Redux state
     const { user, loading, error, message } = useSelector((state) => state.auth);
 
     const [name, setName] = useState('');
@@ -17,13 +16,11 @@ const Profile = () => {
     const [registration_number, setRegistrationNumber] = useState('');
     const [contact_number, setContactNumber] = useState('');
 
-    // Fetch user profile if it's not available or if a refresh is needed
     useEffect(() => {
         if (!user) {
-            dispatch(getUserProfile());  // Dispatch to fetch the profile if not already loaded
+            dispatch(getUserProfile());  
         }
 
-        // Update state with user profile data once it is fetched
         if (user) {
             setName(user.name || '');
             setEmail(user.email || '');
@@ -32,7 +29,6 @@ const Profile = () => {
             setContactNumber(user.contact_number || '');
         }
 
-        // Show toast notifications for success or error messages
         if (message) {
             toast.success(message);
             dispatch({ type: 'CLEAR_PROFILE_MESSAGE' });
@@ -40,21 +36,19 @@ const Profile = () => {
             toast.error(error);
             dispatch({ type: 'CLEAR_PROFILE_ERROR' });
         }
-    }, [dispatch, user, loading, message, error]);  // Ensure correct dependencies
+    }, [dispatch, user, loading, message, error]);  
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const updatedData = {};
 
-        // Only update fields that have changed
         if (name !== user?.name) updatedData.name = name;
         if (email !== user?.email) updatedData.email = email;
         if (business_name !== user?.business_name) updatedData.business_name = business_name;
         if (registration_number !== user?.registration_number) updatedData.registration_number = registration_number;
         if (contact_number !== user?.contact_number) updatedData.contact_number = contact_number;
 
-        // Dispatch the action to update the user profile
         dispatch(updateUserProfile(updatedData));
     };
 
@@ -62,7 +56,6 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
-    // Display message if no profile data is available yet
     if (!user) {
         return <div>No profile data available yet.</div>;
     }

@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Report fraud (for product verification)
 export const reportFraudAPI = async (productId, fraudReason, scanCount, locationDetails) => {
   try {
     const response = await axios.post('/api/fraud/report', {

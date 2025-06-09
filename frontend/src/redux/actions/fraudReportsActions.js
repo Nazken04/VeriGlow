@@ -1,16 +1,9 @@
-// src/redux/actions/fraudReportsActions.js
-
-// IMPORTANT: No import from '../reducers/fraudReducer' or any reducer should be present here.
-// This file is for defining action types and action creators.
-
 import { getManufacturerReportsAPI, getProductDetailsAPI } from '../../api/product';
 
-// Action Types: These are constant strings defining actions that can happen.
 export const FETCH_FRAUD_REPORTS_REQUEST = 'FETCH_FRAUD_REPORTS_REQUEST';
 export const FETCH_FRAUD_REPORTS_SUCCESS = 'FETCH_FRAUD_REPORTS_SUCCESS';
 export const FETCH_FRAUD_REPORTS_FAILURE = 'FETCH_FRAUD_REPORTS_FAILURE';
 
-// Helper functions (remain here as they are specific to data formatting for these reports, extracted from API response)
 const formatUserScanDetails = (scanHistory) => {
     if (!scanHistory || scanHistory.length === 0) {
         return { summary: 'N/A', full: 'N/A', expanded: 'N/A' };
@@ -90,49 +83,45 @@ const formatReportedLocations = (locationsArray) => {
 };
 
 
-// Main action creator: This function returns a Thunk that dispatches actions.
 export const fetchFraudReports = () => async (dispatch) => {
-    dispatch({ type: FETCH_FRAUD_REPORTS_REQUEST }); // Indicate that a request has started
+    dispatch({ type: FETCH_FRAUD_REPORTS_REQUEST });
     try {
         const apiResponse = await getManufacturerReportsAPI();
         if (apiResponse.success && apiResponse.data && apiResponse.data.reports) {
             const baseReports = apiResponse.data.reports || [];
             if (baseReports.length === 0) {
-                dispatch({ type: FETCH_FRAUD_REPORTS_SUCCESS, payload: [] }); // Dispatch success with empty data
+                dispatch({ type: FETCH_FRAUD_REPORTS_SUCCESS, payload: [] });
                 return;
             }
 
             const augmentedReportsData = await Promise.all(
                 baseReports.map(async (reportItem) => {
                     try {
-                        // Attempt to derive productId from various fields or create a unique ID
                         const productId = reportItem.productId || reportItem.productCode || reportItem._id || `missing-${Date.now()}-${Math.random()}`;
-                        const detailResponse = await getProductDetailsAPI(productId); // Fetch details for each report
+                        const detailResponse = await getProductDetailsAPI(productId);
 
                         if (detailResponse.success && detailResponse.data) {
                             const formattedLocations = formatReportedLocations(detailResponse.data.counterfeitReport?.locations);
                             const formattedScanActivity = formatUserScanDetails(detailResponse.data.scanHistory);
                             return { 
                                 ...reportItem, 
-                                productId, // Ensure productId is on the item
+                                productId,
                                 details: detailResponse.data, 
                                 formattedLocations,
                                 formattedScanActivity,
                                 detailsError: null 
                             };
                         } else {
-                            // Handle cases where product details fetch fails for a specific report
                             return { 
                                 ...reportItem, 
                                 productId,
-                                details: null, // No details available
+                                details: null,
                                 formattedLocations: { summary: 'N/A', full: 'N/A', expanded: 'N/A' },
                                 formattedScanActivity: { summary: 'N/A', full: 'N/A', expanded: 'N/A' },
                                 detailsError: detailResponse.error || 'Failed to fetch details' 
                             };
                         }
                     } catch (err) {
-                        // Handle errors during individual product detail fetching
                         const productIdOnError = reportItem.productId || `error-${Date.now()}-${Math.random()}`;
                         console.error(`Error fetching details for ${productIdOnError}:`, err);
                         return { 
@@ -146,16 +135,14 @@ export const fetchFraudReports = () => async (dispatch) => {
                     }
                 })
             );
-            dispatch({ type: FETCH_FRAUD_REPORTS_SUCCESS, payload: augmentedReportsData }); // Dispatch success with the processed data
+            dispatch({ type: FETCH_FRAUD_REPORTS_SUCCESS, payload: augmentedReportsData });
         } else {
-            // Handle cases where the initial API call for reports fails or returns unexpected structure
             dispatch({ 
                 type: FETCH_FRAUD_REPORTS_FAILURE, 
                 payload: apiResponse.error || 'Failed to fetch reports: Unexpected structure.' 
             });
         }
     } catch (err) {
-        // Handle general network or unexpected errors during the entire fetch process
         console.error("Error fetching fraud reports:", err);
         dispatch({ 
             type: FETCH_FRAUD_REPORTS_FAILURE, 

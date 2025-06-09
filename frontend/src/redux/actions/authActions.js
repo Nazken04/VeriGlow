@@ -1,11 +1,10 @@
-// src/redux/actions/authActions.js
 import { toast } from 'react-toastify';
 import {
   registerUserAPI,
-  loginUserAPI, // This is key
+  loginUserAPI,
   forgotPasswordAPI,
   resetPasswordAPI,
-  getUserProfileAPI, // This is key
+  getUserProfileAPI,
   updateUserProfileAPI,
   verifyEmailAPI,
   resendVerificationEmailAPI
@@ -24,7 +23,6 @@ import {
   GET_PROFILE_REQUEST
 } from './types';
 
-// Action for registering a new user
 export const registerUser = (userData) => {
   return async (dispatch) => {
     try {
@@ -45,25 +43,21 @@ export const logoutUser = () => (dispatch) => {
   toast.info('You have been logged out.');
 };
 
-// Action for logging in an existing user
-// REMOVED `navigate` from parameters here
-export const loginUser = (userData) => { // No navigate parameter
+export const loginUser = (userData) => {
   return async (dispatch) => {
     try {
       const response = await loginUserAPI(userData);
       localStorage.setItem('token', response.token);
-      dispatch({ type: LOGIN_SUCCESS, payload: response }); // payload: { token: "...", user: {basic_info} }
-      // We will toast and navigate FROM THE COMPONENT
+      dispatch({ type: LOGIN_SUCCESS, payload: response });
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'Login failed! Please check your credentials.';
       dispatch({ type: LOGIN_FAILURE, payload: errorMessage });
       toast.error(errorMessage);
-      throw err; // Re-throw so component can catch and know login failed
+      throw err;
     }
   };
 };
 
-// Action for requesting a password reset
 export const forgotPassword = (email) => {
   return async (dispatch) => {
     try {
@@ -78,7 +72,6 @@ export const forgotPassword = (email) => {
   };
 };
 
-// Action for resetting the user's password
 export const resetPassword = (token, newPassword) => {
   return async (dispatch) => {
     try {
@@ -93,7 +86,6 @@ export const resetPassword = (token, newPassword) => {
   };
 };
 
-// Action for updating the user's profile
 export const updateUserProfile = (updatedData) => {
   return async (dispatch) => {
     dispatch({ type: UPDATE_PROFILE_REQUEST });
@@ -109,7 +101,6 @@ export const updateUserProfile = (updatedData) => {
   };
 };
 
-// Action for getting the current user's profile (after login)
 export const getUserProfile = () => {
   return async (dispatch) => {
     dispatch({ type: GET_PROFILE_REQUEST });
@@ -121,15 +112,14 @@ export const getUserProfile = () => {
     }
 
     try {
-      const response = await getUserProfileAPI(); // This API call is expected to return full user details
+      const response = await getUserProfileAPI();
       dispatch({ type: USER_PROFILE_SUCCESS, payload: response });
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message || 'Failed to load user profile.';
       dispatch({ type: USER_PROFILE_FAILURE, payload: errorMessage });
-      // Important: If profile fails to load (e.g., token invalid), ensure user is logged out
       if (err.response?.status === 401 || err.response?.status === 403) {
          localStorage.removeItem('token');
-         dispatch({ type: LOGOUT_USER }); // Dispatch logout to clear Redux state
+         dispatch({ type: LOGOUT_USER });
          toast.error("Your session has expired. Please log in again.");
       } else {
          toast.error(errorMessage);
@@ -138,7 +128,6 @@ export const getUserProfile = () => {
   };
 };
 
-// NEW: Action for verifying email
 export const verifyEmail = (token) => {
   return async (dispatch) => {
     dispatch({ type: VERIFY_EMAIL_REQUEST });
@@ -154,7 +143,6 @@ export const verifyEmail = (token) => {
   };
 };
 
-// NEW: Action for resending verification email
 export const resendVerificationEmail = (email) => {
   return async (dispatch) => {
     dispatch({ type: RESEND_VERIFICATION_REQUEST });
@@ -170,7 +158,5 @@ export const resendVerificationEmail = (email) => {
   };
 };
 
-// NEW: Action to clear auth messages
 export const clearAuthMessage = () => ({ type: CLEAR_AUTH_MESSAGE });
-// NEW: Action to clear auth errors
 export const clearAuthError = () => ({ type: CLEAR_AUTH_ERROR });

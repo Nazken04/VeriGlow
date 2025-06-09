@@ -1,100 +1,4 @@
-/* src/styles/FraudReports.css */
-
-/* --- 0. Root Variables & Font Import --- */
-/* Ensure Material Symbols are loaded - best in public/index.html or global CSS */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
-
-:root {
-  /* Brand Color (from Products.css) */
-  --primary-color: #2563EB;
-  --primary-dark-color: #1E40AF;
-  --primary-light-color: #DBEAFE;
-  --primary-extra-light: #EFF6FF;
-
-  /* Text Colors */
-  --text-color: #1F2937;
-  --text-secondary-color: #4B5563;
-  --text-light-color: #6B7280;
-  --text-dark-gray: #374151;
-
-  /* Border & Background Colors */
-  --border-color: #E5E7EB;
-  --background-color: #F9FAFB; /* For overall page background */
-  --white-color: #FFFFFF; /* For card/container backgrounds */
-  --light-gray: #F3F4F6;
-
-  /* Hover & Active States */
-  --hover-bg-color: #F3F4F6;
-  --active-bg-color: #E5E7EB;
-
-  /* Status Colors */
-  --red-status: #DC2626; /* For 'Expired' */
-  --green-status: #059669; /* For 'Success' toast */
-  --info-status: #2563EB; /* For 'Info' toast */
-  --warning-status: #D97706; /* For 'Warning' toast */
-  --yellow-status: #F59E0B; /* Not explicitly used, but from reference */
-
-  /* Filter Chip Colors */
-  --filter-chip-bg: #EEF2FF;
-  --filter-chip-text: #4338CA;
-  --filter-chip-border: #818CF8;
-
-  /* Spacing */
-  --spacing-xs: 0.5rem; /* 8px */
-  --spacing-sm: 0.75rem; /* 12px */
-  --spacing-md: 1rem; /* 16px */
-  --spacing-lg: 1.5rem; /* 24px */
-
-  --spacing-xl: 2rem; /* 32px */
-  --spacing-xxl: 2.5rem; /* 40px */
-
-  /* Border Radius */
-  --border-radius-sm: 0.25rem; /* 4px */
-  --border-radius-md: 0.5rem; /* 8px */
-  --border-radius-lg: 0.75rem; /* 12px */
-  --border-radius-xl: 1rem; /* 16px */
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.5s ease;
-}
-
-/* --- Base Styles --- */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  line-height: 1.5;
-  color: var(--text-color);
-  background-color: var(--background-color);
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-button, input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
-}
-
-:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-/* --- 1. Global Container & Header --- */
-.fraud-reports-container { /* Renamed from manufacturer-products-container */
+.fraud-reports-container {
   max-width: 1200px;
   padding: var(--spacing-lg);
 }
@@ -174,15 +78,13 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* Top-right export buttons */
 .top-right-actions {
     display: flex;
     gap: var(--spacing-sm);
     flex-wrap: wrap;
-    justify-content: flex-end; /* Align right */
+    justify-content: flex-end;
 }
 
-/* Primary Button (General style for buttons like "Add New Batch" if present on page) */
 .primary-button {
   background-color: var(--primary-color);
   color: var(--white-color);
@@ -222,7 +124,6 @@ button, input, select, textarea {
   font-size: 1.125rem;
 }
 
-/* Secondary Button (General style for export buttons) */
 .secondary-button {
     background-color: var(--white-color);
     color: var(--text-dark-gray);
@@ -236,7 +137,7 @@ button, input, select, textarea {
     align-items: center;
     gap: var(--spacing-xs);
     white-space: nowrap;
-    height: 42px; /* Consistent height with filter inputs */
+    height: 42px;
 }
 
 .secondary-button:hover {
@@ -255,44 +156,42 @@ button, input, select, textarea {
     background-color: var(--light-gray);
 }
 
-
-/* --- 2. Filter & Search Controls (Integrated from FraudReportFilters' structure) --- */
 .filter-controls {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end; /* Aligns items to the bottom of the line */
+  align-items: flex-end;
   margin-bottom: var(--spacing-lg);
   gap: var(--spacing-md);
-  padding: var(--spacing-lg); /* Add padding to match card-like appearance */
+  padding: var(--spacing-lg);
   background-color: var(--white-color);
   border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm); /* Lighter shadow for this section */
+  box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
 }
 
 .search-input-group {
   flex-grow: 1;
   min-width: 250px;
-  max-width: 450px; /* Limit search input width for better form aesthetics */
+  max-width: 450px;
   position: relative;
 }
 
 .search-input {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
-  padding-left: calc(var(--spacing-md) + 24px); /* Space for icon */
+  padding-left: calc(var(--spacing-md) + 24px);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-md);
   font-size: 1rem;
   color: var(--text-color);
   transition: all var(--transition-fast);
-  height: 42px; /* Consistent height with other inputs/selects */
+  height: 42px;
 }
 
 .search-input:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px var(--primary-light-color);
-  outline: none; /* Remove default outline */
+  outline: none;
 }
 
 .search-input-group .material-symbols-outlined {
@@ -301,34 +200,30 @@ button, input, select, textarea {
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-light-color);
-  font-size: 1.25rem; /* 20px */
+  font-size: 1.25rem;
   pointer-events: none;
-}
-
-.filter-group {
-    /* No specific order needed here due to flex-wrap and gap */
 }
 
 .filter-group label {
   display: block;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   color: var(--text-secondary-color);
-  margin-bottom: var(--spacing-xs); /* 4px */
+  margin-bottom: var(--spacing-xs);
   font-weight: 500;
   white-space: nowrap;
 }
 
-.filter-select, .filter-input[type="date"] { /* Re-used filter-input for date, so apply styles here */
+.filter-select, .filter-input[type="date"] {
   padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-md);
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
   color: var(--text-color);
   background-color: var(--white-color);
   transition: all var(--transition-fast);
   min-width: 150px;
-  height: 42px; /* Consistent height */
-  appearance: none; /* For custom select arrow */
+  height: 42px;
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
@@ -341,7 +236,6 @@ button, input, select, textarea {
   outline: none;
 }
 
-/* Hide default date icon for custom appearance */
 .filter-input[type="date"]::-webkit-calendar-picker-indicator {
     opacity: 0;
     position: absolute;
@@ -351,11 +245,9 @@ button, input, select, textarea {
 }
 .filter-input[type="date"] {
     position: relative;
-    padding-right: 30px; /* Space for a custom icon if needed */
+    padding-right: 30px;
 }
 
-
-/* --- Filter Chips --- */
 .filter-chips-container {
   display: flex;
   flex-wrap: wrap;
@@ -379,7 +271,7 @@ button, input, select, textarea {
   background-color: var(--filter-chip-bg);
   color: var(--filter-chip-text);
   padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: 9999px; /* Pill shape */
+  border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 500;
   gap: var(--spacing-xs);
@@ -389,7 +281,7 @@ button, input, select, textarea {
 }
 
 .filter-chip:hover {
-  background-color: #E0E7FF; /* Lighter hover color */
+  background-color: #E0E7FF;
 }
 
 .filter-chip button {
@@ -413,7 +305,7 @@ button, input, select, textarea {
 
 .filter-chip button:hover {
   opacity: 1;
-  color: var(--red-status); /* Red on hover for close button */
+  color: var(--red-status);
   background-color: rgba(220, 38, 38, 0.1);
 }
 
@@ -435,7 +327,6 @@ button, input, select, textarea {
   color: var(--text-color);
 }
 
-/* --- 3. Table Styling --- */
 .table-container {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -445,11 +336,11 @@ button, input, select, textarea {
   margin-bottom: var(--spacing-lg);
 }
 
-.reports-table { /* Renamed from batches-table */
+.reports-table {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
-  min-width: 1000px; /* Adjusted min-width for fraud reports columns */
+  min-width: 1000px;
 }
 
 .reports-table thead {
@@ -468,13 +359,13 @@ button, input, select, textarea {
   font-size: 0.875rem;
   border-bottom: none;
   white-space: nowrap;
-  cursor: pointer; /* Indicate sortable */
+  cursor: pointer;
   transition: background-color var(--transition-fast);
-  position: relative; /* For sort icon positioning */
+  position: relative;
   user-select: none;
 }
 
-.reports-table th:hover:not(.checkbox-cell) { /* Exclude checkbox column from hover sort */
+.reports-table th:hover:not(.checkbox-cell) {
   background-color: var(--hover-bg-color);
 }
 
@@ -486,7 +377,6 @@ button, input, select, textarea {
   border-top-right-radius: var(--border-radius-md);
 }
 
-/* Sort icon styling */
 .reports-table th[aria-sort="ascending"],
 .reports-table th[aria-sort="descending"] {
   color: var(--primary-color);
@@ -495,12 +385,12 @@ button, input, select, textarea {
 .reports-table th .material-symbols-outlined.sort-icon {
   margin-left: 5px;
   font-size: 1.1rem;
-  color: var(--text-secondary-color); /* Default inactive color */
+  color: var(--text-secondary-color);
   transition: color var(--transition-fast);
 }
 
 .reports-table th[aria-sort] .material-symbols-outlined.sort-icon {
-  color: var(--primary-color); /* Active color */
+  color: var(--primary-color);
 }
 
 .reports-table tbody tr {
@@ -523,12 +413,12 @@ button, input, select, textarea {
 
 .reports-table td {
   padding: var(--spacing-md) var(--spacing-lg);
-  font-size: 0.9375rem; /* 15px */
+  font-size: 0.9375rem;
   color: var(--text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 250px; /* Default max-width for most cells */
+  max-width: 250px;
   border-right: none;
   border-left: none;
   vertical-align: middle;
@@ -564,7 +454,7 @@ button, input, select, textarea {
   align-items: center;
   justify-content: center;
   color: var(--text-light-color);
-  font-size: 0.75rem; /* 12px */
+  font-size: 0.75rem;
   text-align: center;
   border: 1px dashed var(--border-color);
 }
@@ -573,11 +463,11 @@ button, input, select, textarea {
   font-weight: 500;
 }
 
-.detail-with-copy-icon { /* New class for cells with copy icons */
+.detail-with-copy-icon {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  position: relative; /* For copied tooltip */
+  position: relative;
 }
 
 .copy-icon {
@@ -586,12 +476,12 @@ button, input, select, textarea {
   cursor: pointer;
   transition: color var(--transition-fast);
   flex-shrink: 0;
-  opacity: 0; /* Hidden by default */
+  opacity: 0;
   transition: opacity var(--transition-fast);
 }
 
 .reports-table tr:hover .copy-icon {
-  opacity: 1; /* Show on row hover */
+  opacity: 1;
 }
 
 .copy-icon:hover {
@@ -604,7 +494,7 @@ button, input, select, textarea {
   animation: fadeOut 1.5s forwards;
   margin-left: var(--spacing-xs);
   position: absolute;
-  top: -20px; /* Position above icon */
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--white-color);
@@ -612,7 +502,7 @@ button, input, select, textarea {
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
   z-index: 5;
-  white-space: nowrap; /* Keep "Copied!" on one line */
+  white-space: nowrap;
 }
 
 @keyframes fadeOut {
@@ -620,7 +510,7 @@ button, input, select, textarea {
   to { opacity: 0; }
 }
 
-.status-expired { /* Used for expiry date cells */
+.status-expired {
   color: var(--red-status);
   font-weight: 600;
 }
@@ -630,36 +520,33 @@ button, input, select, textarea {
 }
 
 .expiry-info-icon {
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
   vertical-align: middle;
   margin-left: 5px;
   color: var(--red-status);
 }
 
-/* Expanded content for long text (Reported Locations, Scan Activity) */
 .cell-reported-locations,
 .cell-scan-activity {
-    max-width: 300px; /* Give these columns more space */
+    max-width: 300px;
 }
 
 .expandable-content {
     margin: 0;
-    white-space: pre-wrap; /* Preserve whitespace and allow wrapping */
-    word-break: break-word; /* Break long words */
-    max-height: 4.5em; /* Approximately 3 lines when not expanded */
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 4.5em;
     overflow: hidden;
-    text-overflow: ellipsis; /* Fallback for single line overflow */
+    text-overflow: ellipsis;
     line-height: 1.5;
 }
 
 .reports-table tr.expanded-row .expandable-content {
-    max-height: none; /* Show full content when row is clicked/expanded */
+    max-height: none;
     overflow: visible;
     text-overflow: clip;
 }
 
-
-/* --- 4. Pagination & Empty States --- */
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -672,7 +559,7 @@ button, input, select, textarea {
   background-color: var(--white-color);
   border-bottom-left-radius: var(--border-radius-md);
   border-bottom-right-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm); /* Keep shadow for consistency */
+  box-shadow: var(--shadow-sm);
 }
 
 .page-controls {
@@ -725,7 +612,7 @@ button, input, select, textarea {
   font-size: 0.9375rem;
   margin-left: var(--spacing-md);
   cursor: pointer;
-  appearance: none; /* Hide default dropdown arrow */
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
@@ -778,7 +665,6 @@ button, input, select, textarea {
   line-height: 1.6;
 }
 
-/* --- 5. Loading Skeletons --- */
 .skeleton-row {
   animation: pulse 1.5s infinite ease-in-out;
 }
@@ -790,21 +676,20 @@ button, input, select, textarea {
   margin: 0.2em 0;
 }
 
-.skeleton-cell:nth-child(1) { /* Checkbox */
-  width: 20px; 
-  height: 20px; 
-  border-radius: var(--border-radius-sm); 
-  margin: auto; 
+.skeleton-cell:nth-child(1) {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--border-radius-sm);
+  margin: auto;
 }
 
-.skeleton-cell:nth-child(2) { /* Image */
-  width: 50px; 
-  height: 50px; 
-  border-radius: var(--border-radius-md); 
-  margin: auto; 
+.skeleton-cell:nth-child(2) {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--border-radius-md);
+  margin: auto;
 }
 
-/* Varying widths for other cells */
 .skeleton-cell:nth-child(3) { width: 80%; }
 .skeleton-cell:nth-child(4) { width: 60%; }
 .skeleton-cell:nth-child(5) { width: 40%; }
@@ -822,7 +707,6 @@ button, input, select, textarea {
   100% { background-color: var(--active-bg-color); }
 }
 
-/* --- 6. Modal Styling --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -907,85 +791,82 @@ button, input, select, textarea {
   padding: var(--spacing-sm) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm); /* Space between detail rows */
+  gap: var(--spacing-sm);
 }
 
-/* New: Styling for individual detail rows in modal */
 .modal-detail-row {
     display: flex;
-    align-items: center; /* Align items vertically */
-    gap: var(--spacing-xs); /* Space between label and value */
-    position: relative; /* For copy icon and tooltip */
-    padding: var(--spacing-xs) 0; /* Vertical padding for each row */
-    font-size: 0.9375rem; /* 15px */
+    align-items: center;
+    gap: var(--spacing-xs);
+    position: relative;
+    padding: var(--spacing-xs) 0;
+    font-size: 0.9375rem;
     color: var(--text-color);
 }
 
 .modal-detail-label {
     font-weight: 500;
     color: var(--text-secondary-color);
-    min-width: 150px; /* Fixed width for labels for alignment */
-    text-align: right; /* Align labels to the right */
-    padding-right: var(--spacing-sm); /* Space before colon */
-    flex-shrink: 0; /* Prevent label from shrinking */
+    min-width: 150px;
+    text-align: right;
+    padding-right: var(--spacing-sm);
+    flex-shrink: 0;
 }
 
 .modal-detail-value {
-    flex-grow: 1; /* Allow value to take up remaining space */
-    word-break: break-word; /* Break long words */
-    white-space: normal; /* Allow text to wrap */
+    flex-grow: 1;
+    word-break: break-word;
+    white-space: normal;
 }
 
-.modal-detail-row .copy-icon { /* Copy icon specific to modal */
-    font-size: 1.1rem; /* Slightly larger icon */
-    position: static; /* Remove absolute positioning */
+.modal-detail-row .copy-icon {
+    font-size: 1.1rem;
+    position: static;
     margin-left: var(--spacing-xs);
-    opacity: 0.7; /* Always slightly visible, or fully hidden */
+    opacity: 0.7;
     transition: opacity var(--transition-fast), color var(--transition-fast);
 }
 
 .modal-detail-row:hover .copy-icon {
-    opacity: 1; /* Show fully on row hover */
+    opacity: 1;
 }
 
-.modal-detail-row .copied-tooltip { /* Tooltip for modal copy */
-    top: auto; /* Override table tooltip position */
-    bottom: 100%; /* Position above the icon */
+.modal-detail-row .copied-tooltip {
+    top: auto;
+    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* For multi-line content (Reported Locations, Scan Activity, Description) */
 .modal-detail-block {
-    flex-direction: column; /* Stack label above content */
-    align-items: flex-start; /* Align label/content to start */
-    padding-top: var(--spacing-md); /* More space above blocks */
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: var(--spacing-md);
     padding-bottom: var(--spacing-md);
-    border-top: 1px solid var(--border-color); /* Subtle divider */
+    border-top: 1px solid var(--border-color);
 }
 
 .modal-detail-block .modal-detail-label {
-    text-align: left; /* Label left-aligned for blocks */
-    width: 100%; /* Take full width */
-    min-width: unset; /* Remove fixed width */
+    text-align: left;
+    width: 100%;
+    min-width: unset;
     padding-right: 0;
-    margin-bottom: var(--spacing-xs); /* Space below label */
+    margin-bottom: var(--spacing-xs);
 }
 
-.modal-detail-list { /* Styling for <pre> tags in modal */
+.modal-detail-list {
     width: 100%;
     margin: 0;
     font-size: 0.9375rem;
     color: var(--text-color);
-    background-color: var(--light-gray); /* Light background for lists */
+    background-color: var(--light-gray);
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-sm);
-    white-space: pre-wrap; /* Ensure line breaks */
+    white-space: pre-wrap;
     word-break: break-word;
     line-height: 1.6;
 }
 
-/* --- 7. Bulk Action Bar --- */
 .bulk-action-bar {
   position: sticky;
   bottom: var(--spacing-md);
@@ -993,7 +874,7 @@ button, input, select, textarea {
   transform: translateX(-50%);
   width: fit-content;
   max-width: 90%;
-  background-color: var(--primary-dark-color); /* Darker blue background */
+  background-color: var(--primary-dark-color);
   color: var(--white-color);
   padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--border-radius-lg);
@@ -1004,7 +885,7 @@ button, input, select, textarea {
   z-index: 10;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(20px) translateX(-50%); /* Start hidden below, move up */
+  transform: translateY(20px) translateX(-50%);
   transition: all var(--transition-normal);
 }
 
@@ -1021,8 +902,8 @@ button, input, select, textarea {
 }
 
 .bulk-action-button {
-  background-color: var(--primary-light-color); /* Lighter blue button */
-  color: var(--primary-dark-color); /* Darker blue text */
+  background-color: var(--primary-light-color);
+  color: var(--primary-dark-color);
   border: none;
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--border-radius-sm);
@@ -1036,7 +917,7 @@ button, input, select, textarea {
 }
 
 .bulk-action-button:hover {
-  background-color: var(--white-color); /* White on hover */
+  background-color: var(--white-color);
 }
 
 .bulk-action-button:disabled {
@@ -1048,7 +929,6 @@ button, input, select, textarea {
   font-size: 1.125rem;
 }
 
-/* --- 8. Toast Notifications --- */
 .toast-container {
   position: fixed;
   bottom: var(--spacing-md);
@@ -1060,7 +940,7 @@ button, input, select, textarea {
 }
 
 .toast {
-  background-color: rgba(31, 41, 55, 0.95); /* Dark background for toast */
+  background-color: rgba(31, 41, 55, 0.95);
   color: var(--white-color);
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-md);
@@ -1068,8 +948,8 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  font-size: 0.9375rem; /* 15px */
-  animation: slideInRight 0.3s ease-out, fadeOutToast 3s forwards 2s; /* Fade out after 2s delay */
+  font-size: 0.9375rem;
+  animation: slideInRight 0.3s ease-out, fadeOutToast 3s forwards 2s;
   opacity: 0;
   visibility: hidden;
   max-width: 350px;
@@ -1081,7 +961,7 @@ button, input, select, textarea {
 }
 
 .toast .material-symbols-outlined {
-  font-size: 1.1rem; /* 18px */
+  font-size: 1.1rem;
   flex-shrink: 0;
 }
 
@@ -1100,7 +980,6 @@ button, input, select, textarea {
   to { opacity: 0; }
 }
 
-/* --- 9. Responsive Table (Mobile/Tablet) --- */
 @media screen and (max-width: 768px) {
   .fraud-reports-container {
     margin: var(--spacing-md) auto;
@@ -1170,13 +1049,13 @@ button, input, select, textarea {
   }
 
   .reports-table tbody tr:last-child {
-    margin-bottom: 0;
+    border-bottom: none;
   }
 
   .reports-table td {
     text-align: right;
     position: relative;
-    padding-left: 50%; /* Space for the data-label-header */
+    padding-left: 50%;
     white-space: normal;
     word-break: break-word;
     border-bottom: 1px dashed var(--border-color);
@@ -1221,7 +1100,7 @@ button, input, select, textarea {
   }
 
   .reports-table td .detail-with-copy-icon,
-  .reports-table td .download-btn { /* Re-used for QR/Barcode/Batch Num copy */
+  .reports-table td .download-btn {
     justify-content: flex-end;
     width: 100%;
   }
@@ -1291,7 +1170,6 @@ button, input, select, textarea {
     justify-content: space-between;
   }
 
-  /* Modal responsive adjustments */
   .modal-content {
       padding: var(--spacing-md);
   }
@@ -1321,7 +1199,7 @@ button, input, select, textarea {
   }
 
   .modal-detail-block {
-      border-top: 1px solid var(--border-color); /* Keep divider */
+      border-top: 1px solid var(--border-color);
       padding-top: var(--spacing-md);
   }
 

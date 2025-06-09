@@ -18,12 +18,30 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const corsOptions = {
-  origin: 'http://localhost:3000', // Replace with your frontend's URL
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: 'http://localhost:3000', 
+  optionsSuccessStatus: 200 
 };
-app.use(cors(corsOptions));
+const allowedOrigins = [
+  'http://localhost:3000', // For local frontend development
+  // Placeholder for your Vercel frontend URL, you'll add this AFTER deploying frontend to Vercel
+  'https://your-veriglow-frontend-app.vercel.app', // <-- UPDATE THIS LATER
+  // ... any other origins for mobile apps, Postman etc.
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true); // Allow requests from allowed origins or no origin (e.g., Postman)
+    } else {
+      callback(new Error('Not allowed by CORS'), false); // Deny others
+    }
+  },
+  credentials: true, // If your app uses cookies or sends Authorization headers
+}));
+
+app.use(express.json()); // T
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-app.use(cors())
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+

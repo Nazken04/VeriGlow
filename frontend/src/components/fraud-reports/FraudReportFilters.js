@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useId, useRef } from 'react';
-import { FaCalendarAlt, FaDownload } from 'react-icons/fa'; // Added FaDownload icon
-import { toast } from 'react-toastify'; // Keep toast for feedback
+import { FaCalendarAlt, FaDownload } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
-import '../../styles/FraudReports.css'; // Shared CSS for this page
+import '../../styles/FraudReports.css';
 
 const DATE_FILTER_TYPE = 'Detected At';
 
@@ -23,49 +23,42 @@ const FraudReportFilters = ({ onFilterChange, initialFilters, onExportPDF, onExp
     startDate: '',
     endDate: '',
   });
-  const [showDownloadDropdown, setShowDownloadDropdown] = useState(false); // New state for download dropdown
+  const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
 
-  const isInitialMount = useRef(true); // Use useRef for initialMount check
+  const isInitialMount = useRef(true);
 
   const searchId = useId();
   const dateRangeId = useId();
   const startDateId = useId();
   const endDateId = useId();
 
-  // Sync internal state with external initialFilters on initial mount or significant external change
   useEffect(() => {
     if (isInitialMount.current) {
-        // Only set initial filters if they are provided, otherwise use default empty state
         setLocalFilters(initialFilters && Object.keys(initialFilters).length > 0
             ? initialFilters
             : { searchTerm: '', dateRange: 'all', startDate: '', endDate: '' });
         isInitialMount.current = false;
     } else {
-        // Prevent endless loops if initialFilters is updated frequently but internally
-        // Deep comparison for objects might be needed for complex initialFilters,
-        // but JSON.stringify is often good enough for simple objects.
         const currentLocalFiltersString = JSON.stringify(localFilters);
         const incomingInitialFiltersString = JSON.stringify(initialFilters || {});
         if (currentLocalFiltersString !== incomingInitialFiltersString) {
             setLocalFilters(initialFilters || {});
         }
     }
-  }, [initialFilters]); // Depend on initialFilters prop
+  }, [initialFilters]);
 
-  // Handle predefined date range selection logic
   useEffect(() => {
-    if (localFilters.dateRange === 'custom') return; // Do nothing if custom range is active
+    if (localFilters.dateRange === 'custom') return;
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize to start of day for accurate comparison
+    today.setHours(0, 0, 0, 0);
 
     let calculatedStartDate = '';
     let calculatedEndDate = '';
 
-    // Calculate end date for predefined ranges to be today (inclusive)
-    calculatedEndDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
+    calculatedEndDate = today.toISOString().split('T')[0];
 
-    const tempDate = new Date(today); // Use a temporary date object for calculations
+    const tempDate = new Date(today);
     switch (localFilters.dateRange) {
       case '7d':
         tempDate.setDate(tempDate.getDate() - 7);
@@ -87,14 +80,13 @@ const FraudReportFilters = ({ onFilterChange, initialFilters, onExportPDF, onExp
         tempDate.setFullYear(tempDate.getFullYear() - 1);
         calculatedStartDate = tempDate.toISOString().split('T')[0];
         break;
-      case 'all': // "All Time" means no specific date filters
+      case 'all':
       default:
         calculatedStartDate = '';
         calculatedEndDate = '';
         break;
     }
 
-    // Only update if the calculated dates are different to prevent unnecessary re-renders
     if (localFilters.startDate !== calculatedStartDate || localFilters.endDate !== calculatedEndDate) {
       setLocalFilters(prev => ({
         ...prev,
@@ -102,14 +94,13 @@ const FraudReportFilters = ({ onFilterChange, initialFilters, onExportPDF, onExp
         endDate: calculatedEndDate,
       }));
     }
-  }, [localFilters.dateRange, localFilters.startDate, localFilters.endDate]); // Depend on relevant filter parts
+  }, [localFilters.dateRange, localFilters.startDate, localFilters.endDate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     
     setLocalFilters(prev => {
         const newState = { ...prev, [name]: value };
-        // If user manually changes start/end date, set dateRange to 'custom' unless it's already 'custom'
         if ((name === 'startDate' || name === 'endDate') && prev.dateRange !== 'custom') {
             newState.dateRange = 'custom';
         }
@@ -129,7 +120,6 @@ const FraudReportFilters = ({ onFilterChange, initialFilters, onExportPDF, onExp
     toast.info('Filters cleared.', { autoClose: 1500, className: 'toast-info-custom' });
   };
 
-  // Close download dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (event.target.closest('.export-buttons') === null) {
@@ -155,7 +145,7 @@ const FraudReportFilters = ({ onFilterChange, initialFilters, onExportPDF, onExp
   return (
     <div className="filter-card">
       <div className="filter-card-header">
-        <h3>Filter Batches</h3> {/* Keeping "Filter Batches" as it's the section title */}
+        <h3>Filter Batches</h3>
       </div>
       
       <form className="filter-form" onSubmit={handleApplyFilters}>

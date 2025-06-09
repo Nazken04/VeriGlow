@@ -1,4 +1,3 @@
-// src/redux/reducers/authReducer.js
 import {
   LOGOUT_USER,
   REGISTER_SUCCESS, REGISTER_FAILURE,
@@ -10,7 +9,7 @@ import {
   VERIFY_EMAIL_REQUEST, VERIFY_EMAIL_SUCCESS, VERIFY_EMAIL_FAILURE,
   RESEND_VERIFICATION_REQUEST, RESEND_VERIFICATION_SUCCESS, RESEND_VERIFICATION_FAILURE,
   CLEAR_AUTH_MESSAGE, CLEAR_AUTH_ERROR,
-  GET_PROFILE_REQUEST // Ensure GET_PROFILE_REQUEST is imported
+  GET_PROFILE_REQUEST
 } from '../actions/types';
 
 const initialState = {
@@ -50,7 +49,7 @@ const authReducer = (state = initialState, action) => {
       case RESET_PASSWORD_FAILURE:
       case VERIFY_EMAIL_FAILURE:
       case RESEND_VERIFICATION_FAILURE:
-      case UPDATE_PROFILE_FAILURE: // Ensure this is here
+      case UPDATE_PROFILE_FAILURE:
         return {
           ...state,
           error: action.payload,
@@ -72,7 +71,7 @@ const authReducer = (state = initialState, action) => {
       case VERIFY_EMAIL_REQUEST:
       case RESEND_VERIFICATION_REQUEST:
       case UPDATE_PROFILE_REQUEST:
-      case GET_PROFILE_REQUEST: // Added this as a loading state for profile fetch
+      case GET_PROFILE_REQUEST:
         return {
             ...state,
             loading: true,
@@ -84,7 +83,7 @@ const authReducer = (state = initialState, action) => {
         return {
           ...state,
           user: action.payload,
-          isAuthenticated: true, // IMPORTANT: Set isAuthenticated to true here
+          isAuthenticated: true,
           loading: false,
           error: null,
         };
@@ -94,7 +93,7 @@ const authReducer = (state = initialState, action) => {
           error: action.payload,
           loading: false,
           user: null,
-          isAuthenticated: false, // Ensure this is false on profile fetch failure
+          isAuthenticated: false,
         };
 
       case UPDATE_PROFILE_SUCCESS:

@@ -23,10 +23,8 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Access loading, error, message, and new emailVerificationPending state from Redux
   const { loading, error, message, emailVerificationPending } = useSelector(state => state.auth);
 
-  // --- Password Validation Logic (same as before) ---
   const validatePassword = (pwd) => {
     let strength = 0;
     let errors = [];
@@ -64,7 +62,6 @@ const Register = () => {
   };
 
   const validateEmail = (emailStr) => {
-    // eslint-disable-next-line no-useless-escape
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!emailRegex.test(emailStr)) {
       return 'Please enter a valid email address.';
@@ -100,15 +97,12 @@ const Register = () => {
     }
   };
 
-  // --- Form Submission ---
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Clear previous messages/errors before new submission
     dispatch(clearAuthError());
     dispatch(clearAuthMessage());
 
-    // Re-run all frontend validations on submit
     const passwordValid = validatePassword(password);
     const emailValid = validateEmail(email);
     const passwordsMatch = password === confirmPassword;
@@ -117,7 +111,7 @@ const Register = () => {
       setPasswordError(passwordValid);
       setEmailError(emailValid);
       if (!passwordsMatch) setConfirmPasswordError('Passwords do not match.');
-      return; // Prevent submission if frontend validation fails
+      return; 
     }
 
     const userData = {
@@ -132,7 +126,6 @@ const Register = () => {
     await dispatch(registerUser(userData));
   };
 
-  // NEW: Handle Resend Email
   const handleResendEmail = () => {
     if (email) {
       dispatch(clearAuthError());
@@ -143,7 +136,6 @@ const Register = () => {
     }
   };
 
-  // --- CONDITIONAL RENDERING BASED ON EMAIL VERIFICATION PENDING ---
   if (emailVerificationPending) {
     return (
       <div className="register-page-wrapper">
@@ -184,7 +176,6 @@ const Register = () => {
     );
   }
 
-  // Render the registration form if not yet successful (emailVerificationPending is false)
   return (
     <div className="register-page-wrapper">
       <div className="register-visual-panel">
@@ -283,7 +274,6 @@ const Register = () => {
               {confirmPasswordError && <p className="error-message">{confirmPasswordError}</p>}
             </div>
 
-            {/* NEW: Group Business Name and Registration Number in a form-row */}
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="business-name-input" className="input-label">Business Name</label>
@@ -312,7 +302,6 @@ const Register = () => {
                 />
               </div>
             </div>
-            {/* END NEW */}
 
             <div className="form-group">
               <label htmlFor="contact-number-input" className="input-label">Contact Number</label>

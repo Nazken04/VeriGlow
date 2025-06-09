@@ -1,22 +1,21 @@
-/* src/styles/Sidebar.css */
 .sidebar-container {
-    width: 260px; /* Standard sidebar width */
+    width: 260px;
     height: 100vh;
     background-color: var(--white-color);
     border-right: 1px solid var(--border-color);
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100; /* High z-index */
+    z-index: 100; 
     display: flex;
     flex-direction: column;
-    transition: width 0.3s ease; /* For potential future collapse */
+    transition: width 0.3s ease; 
     box-shadow: var(--shadow-sm);
 }
 
 .sidebar-brand {
     padding: var(--spacing-md) var(--spacing-lg);
-    height: 64px; /* Match Navbar height */
+    height: 64px; 
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
@@ -37,19 +36,16 @@
     color: var(--primary-color);
 }
 
-.sidebar-brand .brand-text {
-    /* Styles for text, visibility can be toggled on collapse */
-}
 
 .sidebar-nav {
-    flex-grow: 1; /* Allows nav to take up space */
+    flex-grow: 1; 
     padding: var(--spacing-md) 0;
-    overflow-y: auto; /* Scroll if many links */
+    overflow-y: auto; 
 }
 
 .sidebar-nav ul {
     list-style: none;
-    padding: 0 var(--spacing-md); /* Padding around the list */
+    padding: 0 var(--spacing-md); 
     margin: 0;
 }
 
@@ -81,15 +77,13 @@
 }
 
 .sidebar-nav a .material-symbols-outlined {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.25rem; 
 }
 
-/* Responsive Sidebar (e.g., collapse or hide) */
 @media (max-width: 768px) {
     .sidebar-container {
-        width: 0; /* Hide sidebar on mobile */
+        width: 0; 
         overflow: hidden;
         border-right: none;
-        /* You would add a toggle button and logic to show it as an overlay */
     }
 }

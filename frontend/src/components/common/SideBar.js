@@ -1,7 +1,7 @@
-// src/components/common/Sidebar.js
+
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import '../../styles/Sidebar.css'; // We'll create this CSS
+import '../../styles/Sidebar.css'; 
 
 const Sidebar = () => {
   return (
@@ -15,7 +15,7 @@ const Sidebar = () => {
       <nav className="sidebar-nav" aria-label="Primary navigation">
         <ul>
           <li>
-            <NavLink to="/dashboard" end> {/* 'end' prop ensures only exact match is active */}
+            <NavLink to="/dashboard" end>
               <span className="material-symbols-outlined">dashboard</span>
               <span>Dashboard</span>
             </NavLink>
@@ -38,16 +38,8 @@ const Sidebar = () => {
               <span>Fraud Reports</span>
             </NavLink>
           </li>
-          {/* Add more links here as needed */}
         </ul>
       </nav>
-      {/* Optional: Add a footer or settings link in the sidebar */}
-      {/* <div className="sidebar-footer">
-          <NavLink to="/settings">
-              <span className="material-symbols-outlined">settings</span>
-              <span>Settings</span>
-          </NavLink>
-      </div> */}
     </aside>
   );
 };

@@ -13,7 +13,7 @@ router.post('/login', authController.login);
 router.get('/profile', authMiddleware, authController.profile);
 
 
-router.get('/verify-email/:token', authController.verifyEmail); // NEW: Email verification route
-router.post('/resend-verification', authController.resendVerificationEmail); // NEW: Resend verification route
+router.get('/verify-email/:token', authController.verifyEmail); 
+router.post('/resend-verification', authController.resendVerificationEmail); 
 
 module.exports = router;

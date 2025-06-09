@@ -1,72 +1,3 @@
-/* src/styles/Register.css */
-
-/* --- 0. Root Variables & Font Import (Consistent with other pages) --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,-50..200'); /* Corrected GRAD range */
-
-:root {
-  /* Brand Color (from your overall project's consistent palette) */
-  --primary-color: #2563EB;
-  --primary-dark-color: #1E40AF;
-  --primary-light-color: #DBEAFE;
-  --primary-extra-light: #EFF6FF; /* Very light blue, good for background gradients */
-
-  /* Text Colors */
-  --text-color: #1F2937; /* Darkest text (main content, titles) */
-  --text-secondary-color: #4B5563; /* Medium grey (labels, subtitles) */
-  --text-light-color: #6B7280; /* Light grey (placeholders, less prominent text) */
-  --text-dark-gray: #374151; /* A slightly darker grey for specific titles */
-  --link-color: #2563EB; /* Consistent link color with primary brand */
-
-  /* Backgrounds */
-  --white-color: #FFFFFF; /* For the register card background */
-  --input-bg-light: #F3F4F6; /* Light background for input fields */
-
-  /* Borders */
-  --border-color: #E5E7EB; /* Light grey border for inputs/cards */
-
-  /* Spacing */
-  --spacing-xs: 0.5rem; /* 8px */
-  --spacing-sm: 0.75rem; /* 12px */ /* This will be the new default gap for tighter forms */
-  --spacing-md: 1rem; /* 16px */
-  --spacing-lg: 1.5rem; /* 24px */
-  --spacing-xl: 2rem; /* 32px */
-  --spacing-xxl: 2.5rem; /* 40px */
-
-  /* Border Radius */
-  --border-radius-sm: 0.25rem; /* 4px */
-  --border-radius-md: 0.5rem; /* 8px */
-  --border-radius-lg: 0.75rem; /* 12px */
-  --border-radius-xl: 1rem; /* 16px (for larger elements like the card) */
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* For significant elevation */
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.3s ease;
-
-  /* Validation Colors */
-  --error-red: #DC2626; /* For error messages and input borders */
-  --strength-none: #E5E7EB; /* Default bar color */
-  --strength-weak: #EF4444; /* Red */
-  --strength-fair: #F59E0B; /* Orange */
-  --strength-good: #3B82F6; /* Blue */
-  --strength-strong: #10B981; /* Green */
-}
-
-/* --- Base HTML Element Styles (to reset browser defaults) --- */
-body {
-  font-family: 'Inter', sans-serif;
-  line-height: 1.5;
-  color: var(--text-color);
-  /* Make sure --background-color-page is defined somewhere globally or use a default */
-  background-color: var(--background-color-page, #F9FAFB); /* Fallback added */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
 a {
   text-decoration: none;
@@ -92,35 +23,31 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   border-radius: var(--border-radius-sm);
 }
 
-/* --- Register Page Wrapper (Split-Screen Container) --- */
 .register-page-wrapper {
-  display: flex; /* Use flexbox for split layout */
-  min-height: 100vh; /* Full viewport height */
-  width: 100%; /* Full viewport width */
-  overflow: hidden; /* Hide any overflow */
-  background-color: var(--white-color); /* Fallback/base color */
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--white-color);
 }
 
-/* --- Left Panel: Visual and Introduction --- */
 .register-visual-panel {
-  flex: 3; /* Takes 3 parts of the 5-part split (e.g., 60% width) */
-  min-width: 400px; /* Minimum width to prevent squishing */
-  background-color: #B2D8F0; /* Base blue color matching image */
+  flex: 3;
+  min-width: 400px;
+  background-color: #B2D8F0;
 
-  /* --- Background Image Styles (Your specific 9:16 image) --- */
-  background-image: url('/assets/veriglow-splash.png'); /* IMPORTANT: Your image path here */
-  background-size: cover; /* Covers the area */
-  background-position: center center; /* Center the image */
+  background-image: url('/assets/veriglow-splash.png');
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
 
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
-  position: relative; /* For text overlay */
-  padding: var(--spacing-xxl); /* Padding for the intro content */
-  box-sizing: border-box; /* Include padding in width */
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: var(--spacing-xxl);
+  box-sizing: border-box;
 
-  /* Optional: Darken/overlay to ensure text readability on top of the image */
   &::before {
       content: '';
       position: absolute;
@@ -128,68 +55,65 @@ button:focus-visible, input:focus-visible, a:focus-visible {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)); /* Subtle dark overlay */
+      background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4));
       z-index: 1;
   }
 }
 
 .register-intro-content {
-    color: var(--white-color); /* White text for contrast on dark overlay */
+    color: var(--white-color);
     text-align: center;
-    max-width: 500px; /* Limit text width for readability */
-    z-index: 2; /* Ensure text is above the overlay */
+    max-width: 500px;
+    z-index: 2;
 }
 
 .intro-welcome-text {
-    font-size: 3rem; /* Large and welcoming */
+    font-size: 3rem;
     font-weight: 700;
     margin-bottom: var(--spacing-md);
     line-height: 1.2;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Subtle text shadow for readability */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .intro-description {
-    font-size: 1.15rem; /* Slightly larger description */
+    font-size: 1.15rem;
     line-height: 1.6;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     margin-bottom: var(--spacing-xl);
 }
 
-/* --- Right Panel: Registration Form --- */
 .register-form-panel {
-  flex: 2; /* Takes 2 parts of the 5-part split (e.g., 40% width) */
+  flex: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--white-color); /* White background for the form side */
-  padding: var(--spacing-lg); /* Padding around the register card */
-  box-sizing: border-box; /* Include padding in width */
-  position: relative; /* For responsive adjustments */
+  background-color: var(--white-color);
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+  position: relative;
 }
 
-/* --- Register Card (No longer needs absolute centering, it's centered by its parent) --- */
 .register-card {
-  background-color: var(--white-color); /* Solid white, no transparency needed here */
+  background-color: var(--white-color);
   border-radius: var(--border-radius-xl);
-  box-shadow: none; /* No shadow needed as it's within a distinct panel */
-  padding: var(--spacing-lg) var(--spacing-xxl); /* Reduced vertical padding from xl to lg */
+  box-shadow: none;
+  padding: var(--spacing-lg) var(--spacing-xxl);
   width: 100%;
-  max-width: 440px; /* Max width applies to the card content */
+  max-width: 440px;
   text-align: center;
   position: static;
   overflow: visible;
   backdrop-filter: none;
 }
 
-/* --- Logo Section (Branding for Form Panel) --- */
 .logo-section {
-  margin-bottom: var(--spacing-lg); /* Reduced margin-bottom from xl to lg */
+  margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
   border-bottom: 1px solid var(--border-color);
 }
 
 .register-logo {
-  max-width: 180px; /* Slightly smaller for the form panel */
+  max-width: 180px;
   height: auto;
   margin-bottom: var(--spacing-md);
   display: block;
@@ -211,35 +135,30 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   margin-top: var(--spacing-xs);
 }
 
-/* --- Registration Form --- */
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm); /* Reduced gap between form groups from md to sm */
+  gap: var(--spacing-sm);
   margin-top: var(--spacing-xl);
   margin-bottom: var(--spacing-lg);
 }
 
-/* NEW: Style for horizontal form rows */
 .form-row {
     display: flex;
-    gap: var(--spacing-sm); /* Gap between elements in the same row */
+    gap: var(--spacing-sm);
     width: 100%;
-    /* flex-wrap: wrap; Not needed here, flex:1 and min-width will handle small screen behavior */
 }
 
 .form-row .form-group {
-    flex: 1; /* Each form group in a row takes equal space */
-    min-width: 48%; /* Ensure it doesn't get too squished before stacking */
-    box-sizing: border-box; /* Include padding/border in width calculation */
-    margin-bottom: 0; /* Remove default margin-bottom as gap handles spacing */
+    flex: 1;
+    min-width: 48%;
+    box-sizing: border-box;
+    margin-bottom: 0;
 }
-/* END NEW */
 
 .form-group {
   text-align: left;
   position: relative;
-  /* margin-bottom: 0; This is generally fine as gap takes over */
 }
 
 .input-label {
@@ -259,7 +178,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   color: var(--text-color);
   background-color: var(--input-bg-light);
   transition: all var(--transition-fast);
-  height: 48px; /* Reduced height from 52px to 48px */
+  height: 48px;
 }
 
 .input-field::placeholder {
@@ -274,10 +193,9 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   outline: none;
 }
 
-/* Validation Feedback */
 .input-field.input-error {
     border-color: var(--error-red);
-    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2); /* Using actual RGB values for clarity */
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
 }
 
 .error-message {
@@ -286,24 +204,21 @@ button:focus-visible, input:focus-visible, a:focus-visible {
     margin-top: 4px;
     text-align: left;
 }
-/* For global error message in success panel */
 .register-error-global {
     margin-top: var(--spacing-md);
     padding: var(--spacing-sm);
     border: 1px solid var(--error-red);
-    background-color: rgba(220, 38, 38, 0.1); /* Using actual RGB values for clarity */
+    background-color: rgba(220, 38, 38, 0.1);
     border-radius: var(--border-radius-sm);
 }
 
-
-/* Password Toggle */
 .password-input-wrapper {
     position: relative;
     width: 100%;
 }
 
 .password-input-wrapper .input-field {
-    padding-right: 48px; /* Space for toggle icon */
+    padding-right: 48px;
 }
 
 .password-toggle {
@@ -321,7 +236,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
     color: var(--text-secondary-color);
 }
 
-/* Password Strength Indicator */
 .password-strength-indicator {
     height: 6px;
     background-color: var(--input-bg-light);
@@ -334,7 +248,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .password-strength-indicator .strength-bar {
     height: 100%;
     width: 0%;
-    background-color: var(--text-light-color); /* Default gray */
+    background-color: var(--text-light-color);
     transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
@@ -346,7 +260,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 
 .password-strength-indicator .strength-text {
     position: absolute;
-    top: -20px; /* Position above the bar */
+    top: -20px;
     left: 0;
     width: 100%;
     text-align: right;
@@ -355,8 +269,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
     padding-right: 4px;
 }
 
-
-/* --- Login Link --- */
 .login-text {
   font-size: 0.9375rem;
   color: var(--text-secondary-color);
@@ -368,7 +280,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   color: var(--link-color);
 }
 
-/* --- Register Button (Primary Call to Action) --- */
 .register-button {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -381,7 +292,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   cursor: pointer;
   transition: all var(--transition-fast);
   box-shadow: var(--shadow-sm);
-  height: 48px; /* Reduced height from 52px to 48px */
+  height: 48px;
 }
 
 .register-button:hover:not(:disabled) {
@@ -402,22 +313,21 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   opacity: 0.8;
 }
 
-/* --- Registration Success Message Panel --- */
 .register-form-panel.register-success-panel {
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
+    align-items: center;
+    justify-content: center;
     text-align: center;
 }
 
 .checkmark-icon {
-    font-size: 4rem; /* Large checkmark */
-    color: var(--strength-strong); /* Green color for success */
+    font-size: 4rem;
+    color: var(--strength-strong);
     margin-bottom: var(--spacing-lg);
     line-height: 1;
 }
 
 .back-to-login-btn {
-    display: inline-block; /* Make it a button-like link */
+    display: inline-block;
     padding: var(--spacing-sm) var(--spacing-lg);
     background-color: var(--primary-color);
     color: var(--white-color);
@@ -430,7 +340,7 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 
 .back-to-login-btn:hover {
     background-color: var(--primary-dark-color);
-    text-decoration: none; /* Remove underline on hover */
+    text-decoration: none;
 }
 
 .resend-text {
@@ -454,8 +364,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
     color: var(--primary-dark-color);
 }
 
-
-/* --- Responsive Adjustments --- */
 @media (max-width: 992px) {
     .register-visual-panel {
         flex: 2;
@@ -475,10 +383,9 @@ button:focus-visible, input:focus-visible, a:focus-visible {
         font-size: 1.5rem;
     }
     .register-card {
-        padding: var(--spacing-lg) var(--spacing-lg); /* Further reduced padding */
+        padding: var(--spacing-lg) var(--spacing-lg);
     }
 }
-
 
 @media (max-width: 768px) {
   .register-page-wrapper {
@@ -565,14 +472,13 @@ button:focus-visible, input:focus-visible, a:focus-visible {
       padding-right: 0;
   }
 
-  /* NEW: Stack form inputs in a row on small screens */
-  @media (max-width: 600px) { /* Adjust this breakpoint as needed */
+  @media (max-width: 600px) {
     .form-row {
         flex-direction: column;
-        gap: var(--spacing-sm); /* Maintain consistent vertical gap */
+        gap: var(--spacing-sm);
     }
     .form-row .form-group {
-        min-width: 100%; /* Take full width when stacked */
+        min-width: 100%;
     }
   }
 }

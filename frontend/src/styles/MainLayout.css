@@ -1,48 +1,38 @@
-/* src/styles/MainLayout.css */
-/* --- Root Variables & Font Imports (as in previous versions) --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 :root {
-  /* Brand Color (from Products.css / FraudReports.css) */
   --primary-color: #2563EB;
   --primary-dark-color: #1E40AF;
   --primary-light-color: #DBEAFE; 
   --primary-extra-light: #EFF6FF; 
 
-  /* Text Colors */
-  --text-color: #1F2937; /* Darkest text */
-  --text-secondary-color: #4B5563; /* Medium grey for labels */
-  --text-light-color: #6B7280; /* Light grey for icons/placeholders */
-  --text-dark-gray: #374151; /* Dark grey for general components */
+  --text-color: #1F2937;
+  --text-secondary-color: #4B5563;
+  --text-light-color: #6B7280;
+  --text-dark-gray: #374151;
 
-  /* Border & Background Colors */
-  --border-color: #E5E7EB; /* Light border */
-  --background-color: #F9FAFB; /* Overall page background */
-  --white-color: #FFFFFF; /* For cards/container backgrounds */
-  --light-gray: #F3F4F6; /* For skeleton/no image */
+  --border-color: #E5E7EB;
+  --background-color: #F9FAFB;
+  --white-color: #FFFFFF;
+  --light-gray: #F3F4F6;
 
-  /* Hover & Active States */
   --hover-bg-color: #F3F4F6;
   --active-bg-color: #E5E7EB;
 
-  /* Spacing */
-  --spacing-xs: 0.5rem; /* 8px */
-  --spacing-sm: 0.75rem; /* 12px */
-  --spacing-md: 1rem; /* 16px */
-  --spacing-lg: 1.5rem; /* 24px */
-  --spacing-xl: 2rem; /* 32px */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
 
-  /* Border Radius */
-  --border-radius-sm: 0.25rem; /* 4px */
-  --border-radius-md: 0.5rem; /* 8px */
-  --border-radius-lg: 0.75rem; /* 12px */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
 
-  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
-  /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
 }
@@ -68,7 +58,6 @@
     position: relative;
 }
 
-/* --- Top Bar specific styles --- */
 .navbar-container.top-bar {
     position: fixed;
     top: 0;
@@ -81,27 +70,23 @@
     box-shadow: none;
     border-bottom: 1px solid var(--border-color);
     transition: left 0.3s ease;
-    /* Updated justify-content to ensure spacing */
-    align-items: center; /* Vertically align items */
+    align-items: center;
 }
 
-/* Hide Brand and Menu Icon from Top Bar when it's acting as the main nav */
 .navbar-container.top-bar .navbar-brand,
 .navbar-container.top-bar .nav-links-wrapper,
 .navbar-container.top-bar .menu-icon {
     display: none; 
 }
 
-/* Top Bar Search Container */
 .top-bar-search {
-    flex-grow: 1; /* Allow search to take space */
+    flex-grow: 1;
     max-width: 600px;
     position: relative;
     display: flex;
     align-items: center;
-    /* Added margin-left for spacing from sidebar (if sidebar not present) */
-    margin-left: var(--spacing-lg); /* Ensure space from the left edge/sidebar if needed */
-    margin-right: var(--spacing-lg); /* Ensure space from the right edge/user actions */
+    margin-left: var(--spacing-lg);
+    margin-right: var(--spacing-lg);
 }
 
 .top-bar-search .search-icon {
@@ -116,12 +101,12 @@
     width: 100%;
     padding: var(--spacing-xs) var(--spacing-md);
     padding-left: 40px;
-    padding-right: 32px; /* Space for clear icon */
+    padding-right: 32px;
     border: 1px solid var(--border-color);
-    border-radius: 24px; /* Pill-shaped search bar */
+    border-radius: 24px;
     background-color: var(--light-gray);
     transition: all var(--transition-fast);
-    height: 48px; /* Taller search bar for better feel */
+    height: 48px;
     font-size: 1rem;
     color: var(--text-color);
 }
@@ -153,7 +138,6 @@
     background-color: var(--hover-bg-color);
 }
 
-/* Search Results Dropdown (styles from previous iteration) */
 .top-bar-search-results {
     position: absolute;
     top: 56px;
@@ -223,14 +207,11 @@
     color: var(--primary-color);
 }
 
-/* User Actions (Desktop) */
-/* Crucial Fix: Ensure this is displayed flex and has appropriate margins */
 .navbar-user-actions {
-  display: flex; /* Ensure it's displayed */
+  display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  flex-shrink: 0; /* Prevent it from shrinking */
-  /* Remove margin-left/right if added elsewhere, use gap from parent */
+  flex-shrink: 0;
 }
 
 .navbar-user-actions .user-profile-link {
@@ -288,10 +269,9 @@
 }
 
 .navbar-user-actions .user-name-desktop {
-    display: inline; /* Ensure name shows */
+    display: inline;
 }
 
-/* --- Toast Notifications (from Navbar.js/MainLayout.css) --- */
 .toast-container {
   position: fixed;
   bottom: var(--spacing-md);
@@ -343,8 +323,6 @@
   to { opacity: 0; }
 }
 
-
-/* Responsive Layout */
 @media (max-width: 768px) {
     .main-content-area {
         margin-left: 0;
@@ -357,7 +335,7 @@
     }
 
     .top-bar-search {
-        display: none; /* Hide search bar on mobile by default in this layout */
+        display: none;
     }
 
     .page-content {
@@ -365,7 +343,6 @@
         padding-top: calc(64px + var(--spacing-md));
     }
 
-    /* Additional mobile adjustments for top bar */
     .navbar-container.top-bar .navbar-user-actions {
         justify-content: flex-end;
         width: 100%;

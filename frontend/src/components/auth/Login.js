@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, clearAuthError, clearAuthMessage, getUserProfile } from '../../redux/actions/authActions'; // Import getUserProfile
+import { loginUser, clearAuthError, clearAuthMessage, getUserProfile } from '../../redux/actions/authActions'; 
 import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify'; // Ensure toast is imported
+import { toast } from 'react-toastify'; 
 import "../../styles/Login.css";
 
 const Login = () => {
@@ -13,20 +13,16 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Access loading, error, message, and isAuthenticated state from Redux
   const { loading, error, message, isAuthenticated } = useSelector(state => state.auth);
 
   useEffect(() => {
-    // If already authenticated (e.g., navigated back from dashboard or successful login already processed),
-    // redirect to dashboard. This prevents showing the login page if already logged in.
     if (isAuthenticated) {
       navigate('/dashboard');
       toast.success('You are already logged in!');
     }
-    // Clear any previous auth messages or errors when component mounts
     dispatch(clearAuthError());
     dispatch(clearAuthMessage());
-  }, [isAuthenticated, navigate, dispatch]); // Depend on isAuthenticated and navigate
+  }, [isAuthenticated, navigate, dispatch]); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -34,16 +30,11 @@ const Login = () => {
     dispatch(clearAuthMessage());
 
     try {
-      await dispatch(loginUser({ email, password })); // Dispatch loginUser
-      // After LOGIN_SUCCESS, state.auth.isAuthenticated becomes true.
-      // The useEffect above will catch this and navigate.
-      // However, to ensure full profile data is immediately available for the dashboard
-      // (especially if loginUser only returns partial data), we explicitly fetch it here.
-      await dispatch(getUserProfile()); // <-- IMPORTANT: Fetch full user profile
-      toast.success('Login successful!'); // Toast success AFTER profile is fetched
-      navigate('/dashboard'); // Navigate AFTER profile is fetched and toasted
+      await dispatch(loginUser({ email, password })); 
+      await dispatch(getUserProfile()); 
+      toast.success('Login successful!'); 
+      navigate('/dashboard'); 
     } catch (err) {
-      // Error is already handled and toasted by authActions, no need to toast here
       console.error("Login attempt failed:", err);
     }
   };

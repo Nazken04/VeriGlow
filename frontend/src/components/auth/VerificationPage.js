@@ -1,9 +1,8 @@
-// frontend/src/components/auth/VerificationPage.js
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { verifyEmail, clearAuthError, clearAuthMessage } from '../../redux/actions/authActions';
-import "../../styles/VerificationPage.css"; // You'll need to create this CSS file
+import "../../styles/VerificationPage.css"; 
 
 const VerificationPage = () => {
   const dispatch = useDispatch();
@@ -12,7 +11,6 @@ const VerificationPage = () => {
   const { loading, error, message } = useSelector(state => state.auth);
 
   useEffect(() => {
-    // Clear any previous global messages or errors from other components
     dispatch(clearAuthError());
     dispatch(clearAuthMessage());
 
@@ -22,10 +20,8 @@ const VerificationPage = () => {
     if (token) {
       dispatch(verifyEmail(token));
     } else {
-      // If no token is found in the URL, set a local error message
       dispatch({ type: 'VERIFY_EMAIL_FAILURE', payload: 'No verification token found in URL.' });
     }
-    // Cleanup on unmount or if component re-renders for some reason
     return () => {
       dispatch(clearAuthError());
       dispatch(clearAuthMessage());

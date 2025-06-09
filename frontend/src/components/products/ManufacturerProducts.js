@@ -1,22 +1,15 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { useNavigate } from 'react-router-dom';
 import {
     fetchManufacturerProducts,
     fetchProductsByBatchAPI
-} from '../../redux/actions/productActions'; // Adjust this path as per your project structure
+} from '../../redux/actions/productActions';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'; // For generating tables in PDF
+import 'jspdf-autotable';
 
-import "../../styles/Products.css"; // Ensure this path is correct for your project
+import "../../styles/Products.css";
 
-/**
- * A simple debounce utility function to limit how often a function is called.
- * Useful for search inputs to prevent excessive re-renders or API calls.
- * @param {function} func The function to debounce.
- * @param {number} delay The delay in milliseconds.
- * @returns {function} The debounced function.
- */
 const debounce = (func, delay) => {
     let timeout;
     return function(...args) {
@@ -26,9 +19,6 @@ const debounce = (func, delay) => {
     };
 };
 
-/**
- * Reusable Modal component.
- */
 const Modal = ({ isOpen, onClose, children, title, className = '' }) => {
     if (!isOpen) return null;
 
@@ -49,15 +39,12 @@ const Modal = ({ isOpen, onClose, children, title, className = '' }) => {
     );
 };
 
-/**
- * Simple Toast Notification component.
- */
 const Toast = ({ message, type = 'success', show, onClose }) => {
     useEffect(() => {
         if (show) {
             const timer = setTimeout(() => {
                 onClose();
-            }, 3000); // Hide after 3 seconds
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [show, onClose]);
@@ -83,37 +70,27 @@ const Toast = ({ message, type = 'success', show, onClose }) => {
     );
 };
 
-
-/**
- * ManufacturerProducts Component
- * Displays an overview of manufacturing batches.
- */
 const ManufacturerProducts = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
     const { batches, loading, error, page, pages } = useSelector((state) => state.product);
 
-    // --- Local States ---
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
     const [isPdfLoading, setIsPdfLoading] = useState(false);
-    const [modalBatch, setModalBatch] = useState(null); // For batch details modal
+    const [modalBatch, setModalBatch] = useState(null);
 
-    const [selectedBatchIds, setSelectedBatchIds] = useState(new Set()); // For bulk actions
-    const [rowsPerPage, setRowsPerPage] = useState(10); // State for rows per page
-    const [toast, setToast] = useState({ show: false, message: '', type: 'success' }); // For toast notifications
-    const [copiedBatchId, setCopiedBatchId] = useState(null); // For copy-to-clipboard feedback
+    const [selectedBatchIds, setSelectedBatchIds] = useState(new Set());
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+    const [copiedBatchId, setCopiedBatchId] = useState(null);
 
-    // New state for date filtering
-    const [activeDateFilter, setActiveDateFilter] = useState('all'); // 'all', 'last30', 'last90', 'last180', 'last365'
+    const [activeDateFilter, setActiveDateFilter] = useState('all');
 
-    // --- Effects ---
     useEffect(() => {
-        // Assume fetchManufacturerProducts supports rowsPerPage and page for server-side pagination
         dispatch(fetchManufacturerProducts(page || 1, rowsPerPage));
     }, [dispatch, page, rowsPerPage]);
 
-    // Debounced search term update
     const debouncedSetSearchTerm = useCallback(
         debounce((value) => {
             setSearchTerm(value);
@@ -122,9 +99,7 @@ const ManufacturerProducts = () => {
     );
 
     const handleSearchChange = (e) => {
-        // Controlled component: update local state immediately for input value
         setSearchTerm(e.target.value);
-        // Then debounce for actual filtering logic
         debouncedSetSearchTerm(e.target.value);
     };
 
@@ -137,26 +112,20 @@ const ManufacturerProducts = () => {
     };
 
     const handleClearAllFilters = () => {
-        setSearchTerm(''); // Clear the input value
+        setSearchTerm('');
         setActiveDateFilter('all');
-        // If debounced search term needs to be explicitly cleared for immediate filter update:
-        // debouncedSetSearchTerm(''); // This might be needed if the debounce isn't linked to the controlled input directly for clearing.
-                                     // In this setup, setting searchTerm to '' will trigger re-memoization of filteredAndSortedBatches.
     };
 
-
-    // --- Sorting Logic ---
     const requestSort = (key) => {
         let direction = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         } else if (sortConfig.key === key && sortConfig.direction === 'descending') {
-            direction = 'ascending'; // Cycle between asc/desc
+            direction = 'ascending';
         }
         setSortConfig({ key, direction });
     };
 
-    // ONLY shows sort direction icon when a column is actively sorted, matching the design.
     const getSortIndicator = (key) => {
         if (sortConfig.key === key) {
             return (
@@ -165,14 +134,12 @@ const ManufacturerProducts = () => {
                 </span>
             );
         }
-        return null; // No icon for unsorted columns as per design
+        return null;
     };
 
-
-    // --- Date Filtering Logic ---
     const getDateRange = (filterType) => {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Normalize to start of day
+        today.setHours(0, 0, 0, 0);
         let startDate = null;
         let endDate = today;
 
@@ -185,27 +152,24 @@ const ManufacturerProducts = () => {
                 startDate = new Date(today);
                 startDate.setDate(today.getDate() - 90);
                 break;
-            case 'last180': // Last 6 months
+            case 'last180':
                 startDate = new Date(today);
                 startDate.setDate(today.getDate() - 180);
                 break;
-            case 'last365': // Last year
+            case 'last365':
                 startDate = new Date(today);
                 startDate.setFullYear(today.getFullYear() - 1);
                 break;
             case 'all':
             default:
-                break; // No date filter applied
+                break;
         }
         return { startDate, endDate };
     };
 
-
-    // --- Filtering & Sorting Memoization ---
     const filteredAndSortedBatches = useMemo(() => {
-        let sortableBatches = [...batches]; // Start with a copy of the original batches
+        let sortableBatches = [...batches];
 
-        // 1. Apply Search Filter
         if (searchTerm) {
             const lowerCaseSearchTerm = searchTerm.toLowerCase();
             sortableBatches = sortableBatches.filter(batch =>
@@ -215,18 +179,15 @@ const ManufacturerProducts = () => {
             );
         }
 
-        // 2. Apply Date Filter (based on manufacturing_date)
         const { startDate, endDate } = getDateRange(activeDateFilter);
         if (startDate) {
             sortableBatches = sortableBatches.filter(batch => {
-                // Ensure manufacturing_date is parsed correctly, handling potential Unix timestamps
-                const manufDate = new Date(Number(batch.manufacturing_date) < 1000000000000 ? Number(batch.manufacturing_date) * 1000 : batch.manufacturing_date); // Corrected to check for milliseconds
-                manufDate.setHours(0, 0, 0, 0); // Normalize to start of day
+                const manufDate = new Date(Number(batch.manufacturing_date) < 1000000000000 ? Number(batch.manufacturing_date) * 1000 : batch.manufacturing_date);
+                manufDate.setHours(0, 0, 0, 0);
                 return manufDate >= startDate && manufDate <= endDate;
             });
         }
 
-        // 3. Apply Sorting
         if (sortConfig.key !== null) {
             sortableBatches.sort((a, b) => {
                 let aValue = a[sortConfig.key];
@@ -236,7 +197,6 @@ const ManufacturerProducts = () => {
                     aValue = Number(aValue);
                     bValue = Number(bValue);
                 } else if (sortConfig.key === 'manufacturing_date' || sortConfig.key === 'expiry_date') {
-                    // Convert to milliseconds if it looks like a Unix timestamp (seconds)
                     aValue = new Date(Number(aValue) < 1000000000000 ? Number(aValue) * 1000 : aValue).getTime();
                     bValue = new Date(Number(bValue) < 1000000000000 ? Number(bValue) * 1000 : bValue).getTime();
                 } else {
@@ -256,16 +216,14 @@ const ManufacturerProducts = () => {
         return sortableBatches;
     }, [batches, searchTerm, sortConfig, activeDateFilter]);
 
-    // --- Date Formatting & Expiry Status (Revised to match strict red if expired) ---
     const formatDate = (dateValue) => {
         if (!dateValue) return '-';
         try {
-            // Convert to milliseconds if it looks like a Unix timestamp (seconds)
-            const date = new Date(Number(dateValue) < 1000000000000 ? Number(dateValue) * 1000 : dateValue); // Corrected to check for milliseconds
+            const date = new Date(Number(dateValue) < 1000000000000 ? Number(dateValue) * 1000 : dateValue);
             if (isNaN(date.getTime())) {
-                return '-'; // Still invalid after conversion attempts
+                return '-';
             }
-            return date.toLocaleDateString('en-GB'); // Uses DD/MM/YYYY format
+            return date.toLocaleDateString('en-GB');
         } catch (e) {
             console.error("Error formatting date:", dateValue, e);
             return '-';
@@ -275,9 +233,8 @@ const ManufacturerProducts = () => {
     const getExpiryStatus = (expiryDate) => {
         if (!expiryDate) return { text: 'N/A', class: 'status-normal', daysLeft: null };
         const today = new Date();
-        // Convert to milliseconds if it looks like a Unix timestamp (seconds)
-        const expiry = new Date(Number(expiryDate) < 1000000000000 ? Number(expiryDate) * 1000 : expiryDate); // Corrected to check for milliseconds
-        today.setHours(0, 0, 0, 0); // Normalize to start of day
+        const expiry = new Date(Number(expiryDate) < 1000000000000 ? Number(expiryDate) * 1000 : expiryDate);
+        today.setHours(0, 0, 0, 0);
         expiry.setHours(0, 0, 0, 0);
 
         const diffTime = expiry.getTime() - today.getTime();
@@ -286,24 +243,21 @@ const ManufacturerProducts = () => {
         if (diffDays < 0) {
             return { text: 'Expired', class: 'status-expired', daysLeft: diffDays };
         } else {
-            // Only 'expired' gets special styling (red text, icon)
             return { text: `Expires in ${diffDays} days`, class: 'status-normal', daysLeft: diffDays };
         }
     };
 
-    // --- Copy to Clipboard ---
     const copyToClipboard = async (text, batchId) => {
         try {
             await navigator.clipboard.writeText(text);
-            setCopiedBatchId(batchId); // Show "Copied!" for this batch ID
-            setTimeout(() => setCopiedBatchId(null), 1500); // Hide after 1.5 seconds
+            setCopiedBatchId(batchId);
+            setTimeout(() => setCopiedBatchId(null), 1500);
         } catch (err) {
             console.error('Failed to copy text: ', err);
             showToast('Failed to copy Batch ID.', 'error');
         }
     };
 
-    // --- Individual PDF Generation Logic (Download Codes) ---
     const downloadCodesPDF = async (batchSummary) => {
         setIsPdfLoading(true);
         try {
@@ -319,9 +273,8 @@ const ManufacturerProducts = () => {
 
             let yPosition = 20;
             const leftMargin = 15;
-            const itemHeight = 60; // Space per item including codes and text
+            const itemHeight = 60;
 
-            // Batch Summary Header
             pdf.setFontSize(18);
             pdf.text('Batch Product Codes', leftMargin, yPosition);
             yPosition += 10;
@@ -338,7 +291,6 @@ const ManufacturerProducts = () => {
             yPosition += 15;
 
             individualProducts.forEach((currentProduct, i) => {
-                // Add new page if content will overflow
                 if (yPosition + itemHeight > (pdf.internal.pageSize.height - 20)) {
                     pdf.addPage();
                     yPosition = 20;
@@ -349,7 +301,6 @@ const ManufacturerProducts = () => {
                 const barcodeWidth = 80;
                 const barcodeHeight = 25;
 
-                // Barcode image
                 if (currentProduct.barcode_image && currentProduct.barcode_image.startsWith('data:image')) {
                     try {
                         const imgData = currentProduct.barcode_image;
@@ -363,7 +314,6 @@ const ManufacturerProducts = () => {
                     pdf.setFontSize(8).text("No Barcode Image", barcodeX + barcodeWidth / 2, barcodeY + barcodeHeight / 2, { align: 'center' });
                 }
 
-                // QR Code image
                 const qrCodeX = barcodeX + barcodeWidth + 10;
                 const qrCodeY = yPosition;
                 const qrCodeSize = 25;
@@ -380,13 +330,11 @@ const ManufacturerProducts = () => {
                     pdf.setFontSize(8).text("No QR Image", qrCodeX + qrCodeSize / 2, qrCodeY + qrCodeSize / 2, { align: 'center' });
                 }
 
-                // Textual details below codes - Removed Product ID as requested
                 const textDetailY = yPosition + Math.max(barcodeHeight, qrCodeSize) + 5;
                 pdf.setFontSize(10);
-                // pdf.text(`Product ID: ${currentProduct.product_id || 'N/A'}`, leftMargin, textDetailY); // REMOVED AS REQUESTED
-                pdf.text(`Item Code: ${currentProduct.barcode || 'N/A'}`, leftMargin, textDetailY); // Adjusted Y position
+                pdf.text(`Item Code: ${currentProduct.barcode || 'N/A'}`, leftMargin, textDetailY);
                 
-                yPosition += itemHeight; // Move to the next item's starting position
+                yPosition += itemHeight;
             });
 
             pdf.save(`Batch_Codes_${batchSummary.batch_number}.pdf`);
@@ -400,7 +348,6 @@ const ManufacturerProducts = () => {
         }
     };
 
-    // --- Bulk PDF Download (for selected batches - Summary) ---
     const handleDownloadSelectedPdfs = async () => {
         if (selectedBatchIds.size === 0) {
             showToast('Please select at least one batch to download.', 'error');
@@ -411,28 +358,25 @@ const ManufacturerProducts = () => {
         let successCount = 0;
         let failCount = 0;
 
-        // Convert Set to Array to iterate reliably
         const batchesToDownload = Array.from(selectedBatchIds).map(id =>
             batches.find(b => b.batch_number === id)
-        ).filter(Boolean); // Filter out any null/undefined if batch not found
+        ).filter(Boolean);
 
-        // Create a single consolidated PDF for all selected batches
         const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
         let yPosition = 20;
         const leftMargin = 15;
         const pageHeight = pdf.internal.pageSize.height;
-        const sectionHeight = 80; // Height per batch section
+        const sectionHeight = 80;
 
         pdf.setFontSize(22);
         pdf.text('Selected Batches Product Codes Summary', leftMargin, yPosition);
         yPosition += 15;
 
         for (const batch of batchesToDownload) {
-            // Add new page if content will overflow
-            if (yPosition + sectionHeight > (pageHeight - 20) && batch !== batchesToDownload[0]) { // Don't add page for first batch if it fits
+            if (yPosition + sectionHeight > (pageHeight - 20) && batch !== batchesToDownload[0]) {
                 pdf.addPage();
                 yPosition = 20;
-                pdf.setFontSize(18); // Header for new page
+                pdf.setFontSize(18);
                 pdf.text('Selected Batches Product Codes Summary (Cont.)', leftMargin, yPosition);
                 yPosition += 15;
             }
@@ -441,7 +385,6 @@ const ManufacturerProducts = () => {
                 const result = await fetchProductsByBatchAPI(batch.batch_number);
                 if (result.success && result.data && result.data.length > 0) {
                     pdf.setFontSize(14);
-                    // Added more batch information as requested ("add all information" interpreted as comprehensive batch details)
                     pdf.text(`Batch ID: ${batch.batch_number}`, leftMargin, yPosition);
                     yPosition += 6;
                     pdf.text(`Product Name: ${batch.product_name || 'N/A'}`, leftMargin, yPosition);
@@ -461,16 +404,14 @@ const ManufacturerProducts = () => {
                         yPosition += 6;
                         pdf.text(`GTIN: ${batch.gtin}`, leftMargin, yPosition);
                     }
-                    yPosition += 8; // Space before listing individual codes
+                    yPosition += 8;
 
                     pdf.setFontSize(10);
                     pdf.text('Example Product Codes:', leftMargin, yPosition);
                     yPosition += 5;
 
-                    // Max 3 individual product codes shown per batch in summary
                     const productsToDisplay = result.data.slice(0, 3);
                     productsToDisplay.forEach((prod, idx) => {
-                        // Removed (ID: ${prod.product_id || 'N/A'}) as requested
                         pdf.text(`  Code ${idx + 1}: ${prod.barcode || 'N/A'}`, leftMargin, yPosition);
                         yPosition += 5;
                     });
@@ -478,14 +419,14 @@ const ManufacturerProducts = () => {
                         pdf.text(`  ... and ${result.data.length - 3} more items.`, leftMargin, yPosition);
                         yPosition += 5;
                     }
-                    pdf.line(leftMargin, yPosition, pdf.internal.pageSize.width - leftMargin, yPosition); // Separator
+                    pdf.line(leftMargin, yPosition, pdf.internal.pageSize.width - leftMargin, yPosition);
                     yPosition += 7;
                     successCount++;
                 } else {
                     failCount++;
                     pdf.setFontSize(12).text(`Batch ID: ${batch.batch_number} - No individual products found or API error.`, leftMargin, yPosition);
                     yPosition += 10;
-                    pdf.line(leftMargin, yPosition, pdf.internal.pageSize.width - leftMargin, yPosition); // Separator
+                    pdf.line(leftMargin, yPosition, pdf.internal.pageSize.width - leftMargin, yPosition);
                     yPosition += 7;
                     console.warn(`Skipping PDF for batch ${batch.batch_number}: No products found or API error.`);
                 }
@@ -493,7 +434,7 @@ const ManufacturerProducts = () => {
                 failCount++;
                 pdf.setFontSize(12).text(`Batch ID: ${batch.batch_number} - Error fetching data.`, leftMargin, yPosition);
                 yPosition += 10;
-                pdf.line(leftMargin, yPosition, pdf.internal.pageSize.width - leftMargin, yPosition); // Separator
+                pdf.line(leftMargin, yPosition, pdf.internal.pageSize.width - leftMargin, yPosition);
                 yPosition += 7;
                 console.error(`Error generating PDF for batch ${batch.batch_number}:`, err);
             }
@@ -501,7 +442,7 @@ const ManufacturerProducts = () => {
         pdf.save(`Selected_Batches_Summary_${new Date().toISOString().slice(0, 10)}.pdf`);
 
         setIsPdfLoading(false);
-        setSelectedBatchIds(new Set()); // Clear selection after action
+        setSelectedBatchIds(new Set());
 
         if (successCount > 0 && failCount === 0) {
             showToast(`Successfully generated summary PDF for ${successCount} batch(es).`);
@@ -512,8 +453,6 @@ const ManufacturerProducts = () => {
         }
     };
 
-
-    // --- Bulk Actions Checkbox Logic ---
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = new Set(filteredAndSortedBatches.map((batch) => batch.batch_number));
@@ -536,16 +475,12 @@ const ManufacturerProducts = () => {
     const isBatchSelected = (batchId) => selectedBatchIds.has(batchId);
     const areAllSelected = filteredAndSortedBatches.length > 0 && selectedBatchIds.size === filteredAndSortedBatches.length;
 
-    // --- Rows per Page & Pagination ---
     const handleRowsPerPageChange = (e) => {
         setRowsPerPage(Number(e.target.value));
-        // Reset to first page when rows per page changes
         dispatch(fetchManufacturerProducts(1, Number(e.target.value)));
     };
 
-    // Render skeleton rows while loading
     const renderSkeletonRows = () => {
-        // 8 columns + 1 for checkbox = 9 columns
         return Array(rowsPerPage).fill(0).map((_, index) => (
             <tr key={`skeleton-${index}`} className="skeleton-row">
                 {Array(9).fill(0).map((_, cellIndex) => (
@@ -557,17 +492,14 @@ const ManufacturerProducts = () => {
         ));
     };
 
-    // Determine if any filters are active
     const areFiltersActive = searchTerm !== '' || activeDateFilter !== 'all';
 
     return (
         <div className="manufacturer-products-container">
-            {/* Global Page Header */}
             <div className="page-header">
                 <div className="page-title-group">
                     <h1 className="page-title">Batch Overview</h1>
                 </div>
-                {/* Add New Batch button (top right) - redirects */}
                 <button className="primary-button" onClick={() => navigate('/product-register')}>
                     <span className="material-symbols-outlined">add</span>
                     Add New Batch
@@ -577,7 +509,6 @@ const ManufacturerProducts = () => {
                 This page provides a comprehensive overview of your manufacturing batches. You can view, search, sort, and filter batch details including product information, manufacturing and expiry dates, and ingredients. Download unique product codes for each batch for traceability and authenticity.
             </p>
 
-            {/* Bulk Action Bar - Visible only when items are selected */}
             <div className={`bulk-action-bar ${selectedBatchIds.size > 0 ? 'visible' : ''}`}
                  role="toolbar" aria-label="Bulk actions for selected batches">
                 <span className="bulk-action-count">{selectedBatchIds.size} items selected</span>
@@ -590,7 +521,6 @@ const ManufacturerProducts = () => {
                 </button>
             </div>
 
-            {/* Filter and Search Controls */}
             <div className="filter-controls">
                 <div className="search-input-group">
                     <span className="material-symbols-outlined">search</span>
@@ -599,11 +529,10 @@ const ManufacturerProducts = () => {
                         placeholder="Search by product name, batch ID, or ingredients..."
                         className="search-input"
                         onChange={handleSearchChange}
-                        value={searchTerm} // Controlled component for clearing filter chip
+                        value={searchTerm}
                         aria-label="Search batches"
                     />
                 </div>
-                {/* Date Filter Dropdown */}
                 <div className="filter-group">
                     <label htmlFor="date-filter">Manufactured Date:</label>
                     <select
@@ -620,15 +549,8 @@ const ManufacturerProducts = () => {
                         <option value="last365">Last Year</option>
                     </select>
                 </div>
-
-                {/* General "Filters" button - REMOVED AS REQUESTED */}
-                {/* <button className="filter-button" onClick={() => showToast('Filters functionality under development. (Mock)', 'info')} aria-label="Open filter options">
-                    <span className="material-symbols-outlined">filter_alt</span>
-                    Filters
-                </button> */}
             </div>
 
-            {/* Active Filter Chips */}
             {(searchTerm || activeDateFilter !== 'all') && (
                 <div className="filter-chips-container" aria-live="polite" aria-atomic="true">
                     <span className="filter-chips-label">Active Filters:</span>
@@ -659,8 +581,6 @@ const ManufacturerProducts = () => {
                 </div>
             )}
 
-
-            {/* Conditional Loading, Error, and Empty States */}
             {loading && (
                 <div className="table-container">
                     <table className="batches-table">
@@ -708,7 +628,6 @@ const ManufacturerProducts = () => {
                 </div>
             )}
 
-            {/* Batches Table - Only render if data exists and not loading */}
             {!loading && !error && filteredAndSortedBatches.length > 0 && (
                 <div className="table-container">
                     <table className="batches-table">
@@ -736,12 +655,11 @@ const ManufacturerProducts = () => {
                             {filteredAndSortedBatches.map(batch => {
                                 const expiryStatus = getExpiryStatus(batch.expiry_date);
                                 return (
-                                    // Row click handler to open the batch details modal
                                     <tr key={batch.batch_number} onClick={() => setModalBatch(batch)} role="button" tabIndex="0" aria-label={`View details for batch ${batch.batch_number}`}>
                                         <td style={{ cursor: 'default' }} className="checkbox-cell">
                                             <input
                                                 type="checkbox"
-                                                onClick={(e) => e.stopPropagation()} // Prevent row click when checkbox is clicked
+                                                onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => handleCheckboxClick(e, batch.batch_number)}
                                                 checked={isBatchSelected(batch.batch_number)}
                                                 aria-label={`Select batch ${batch.batch_number}`}
@@ -753,10 +671,10 @@ const ManufacturerProducts = () => {
                                                     src={batch.image_url}
                                                     alt={batch.product_name || 'Product Image'}
                                                     className="product-image"
-                                                    loading="lazy" // Lazy load images
+                                                    loading="lazy"
                                                     onError={e => {
                                                         e.target.onerror = null;
-                                                        e.target.src = 'https://via.placeholder.com/64x64?text=No+Img'; // Generic placeholder
+                                                        e.target.src = 'https://via.placeholder.com/64x64?text=No+Img';
                                                     }}
                                                 />
                                             ) : (
@@ -767,7 +685,6 @@ const ManufacturerProducts = () => {
                                             <span className="product-name-text">
                                                 {batch.product_name || '-'}
                                             </span>
-                                            {/* Truncation with tooltip can be added here if needed */}
                                         </td>
                                         <td data-label-header="Batch ID" className="batch-id-cell" title="Click to copy Batch ID">
                                             <span onClick={(e) => e.stopPropagation()}>{batch.batch_number}</span>
@@ -811,7 +728,6 @@ const ManufacturerProducts = () => {
                 </div>
             )}
 
-            {/* Pagination Controls */}
             {!loading && !error && filteredAndSortedBatches.length > 0 && (
                 <div className="pagination">
                     <span className="total-items-count">Showing {filteredAndSortedBatches.length} of {batches.length} batches</span>
@@ -825,7 +741,6 @@ const ManufacturerProducts = () => {
                         <option value={10}>Show 10</option>
                         <option value={25}>Show 25</option>
                         <option value={50}>Show 50</option>
-                        {/* <option value={batches.length}>Show All</option> // Use with caution for very large datasets */}
                     </select>
                     {pages > 1 && (
                         <div className="page-controls">
@@ -861,7 +776,6 @@ const ManufacturerProducts = () => {
                 </div>
             )}
 
-            {/* Batch Details Modal */}
             <Modal isOpen={!!modalBatch} onClose={() => setModalBatch(null)} title="Batch Details">
                 {modalBatch && (
                     <>
@@ -877,7 +791,6 @@ const ManufacturerProducts = () => {
                 )}
             </Modal>
 
-            {/* Toast Notification Container */}
             <div className="toast-container">
                 <Toast show={toast.show} message={toast.message} type={toast.type} onClose={closeToast} />
             </div>

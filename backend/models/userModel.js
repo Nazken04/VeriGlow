@@ -9,14 +9,12 @@ const userSchema = new mongoose.Schema({
   contact_number: { type: String },
   role: { type: String, enum: ['consumer', 'manufacturer'], default: 'manufacturer' }, 
   
-  // --- NEW FIELDS FOR EMAIL VERIFICATION ---
   isVerified: {
     type: Boolean,
-    default: false, // User is NOT verified by default
+    default: false, 
   },
   verificationToken: String,
-  verificationTokenExpires: Date, // Date when the token expires
-  // ------------------------------------------
+  verificationTokenExpires: Date, 
 
   reports: [{
     product: {

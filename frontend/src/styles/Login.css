@@ -1,117 +1,28 @@
-/* src/styles/Login.css */
-
-/* --- 0. Root Variables & Font Import (Consistent with other pages) --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
-
-:root {
-  /* Brand Color (from your overall project's consistent palette) */
-  --primary-color: #2563EB;
-  --primary-dark-color: #1E40AF;
-  --primary-light-color: #DBEAFE; /* Very light blue, good for background gradients */
-  --primary-extra-light: #EFF6FF; /* Even lighter blue, good for subtle backgrounds */
-
-  /* Text Colors */
-  --text-color: #1F2937; /* Darkest text (main content, titles) */
-  --text-secondary-color: #4B5563; /* Medium grey (labels, subtitles) */
-  --text-light-color: #6B7280; /* Light grey (placeholders, less prominent text) */
-  --text-dark-gray: #374151; /* A slightly darker grey for specific titles */
-  --link-color: #2563EB; /* Consistent link color with primary brand */
-
-  /* Backgrounds */
-  --white-color: #FFFFFF; /* For the login card background */
-  --input-bg-light: #F3F4F6; /* Light background for input fields */
-
-  /* Borders */
-  --border-color: #E5E7EB; /* Light grey border for inputs/cards */
-
-  /* Spacing */
-  --spacing-xs: 0.5rem; /* 8px */
-  --spacing-sm: 0.75rem; /* 12px */
-  --spacing-md: 1rem; /* 16px */
-  --spacing-lg: 1.5rem; /* 24px */
-  --spacing-xl: 2rem; /* 32px */
-  --spacing-xxl: 2.5rem; /* 40px */
-
-  /* Border Radius */
-  --border-radius-sm: 0.25rem; /* 4px */
-  --border-radius-md: 0.5rem; /* 8px */
-  --border-radius-lg: 0.75rem; /* 12px */
-  --border-radius-xl: 1rem; /* 16px (for larger elements like the card) */
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* For significant elevation */
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.3s ease;
-}
-
-
-body {
-  font-family: 'Inter', sans-serif;
-  line-height: 1.5;
-  color: var(--text-color);
-  background-color: var(--background-color-page);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  text-decoration: none;
-  color: var(--link-color);
-  transition: color var(--transition-fast);
-}
-
-a:hover {
-  color: var(--primary-dark-color);
-  text-decoration: underline;
-}
-
-button, input {
-  font-family: inherit;
-  font-size: inherit;
-  box-sizing: border-box;
-  outline: none;
-}
-
-button:focus-visible, input:focus-visible, a:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-  border-radius: var(--border-radius-sm);
-}
-
-/* --- Login Page Wrapper (Split-Screen Container) --- */
 .login-page-wrapper {
-  display: flex; /* Use flexbox for split layout */
-  min-height: 100vh; /* Full viewport height */
-  width: 100%; /* Full viewport width */
-  overflow: hidden; /* Hide any overflow */
-  background-color: var(--white-color); /* Fallback/base color */
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--white-color);
 }
 
-/* --- Left Panel: Visual and Introduction --- */
 .login-visual-panel {
-  flex: 3; /* Takes 3 parts of the 5-part split (e.g., 60% width) */
-  min-width: 400px; /* Minimum width to prevent squishing */
-  background-color: #B2D8F0; /* Base blue color matching image */
+  flex: 3;
+  min-width: 400px;
+  background-color: #B2D8F0;
   
-  /* --- Background Image Styles (Your specific 9:16 image) --- */
-  background-image: url('/assets/veriglow-splash.png'); /* <<< IMPORTANT: Your image path here */
-  background-size: cover; /* Covers the area */
-  background-position: center center; /* Center the image */
+  background-image: url('/assets/veriglow-splash.png');
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
   
   display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
-  position: relative; /* For text overlay */
-  padding: var(--spacing-xxl); /* Padding for the intro content */
-  box-sizing: border-box; /* Include padding in width */
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: var(--spacing-xxl);
+  box-sizing: border-box;
   
-  /* Optional: Darken/overlay to ensure text readability on top of the image */
   &::before {
       content: '';
       position: absolute;
@@ -119,60 +30,57 @@ button:focus-visible, input:focus-visible, a:focus-visible {
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)); /* Subtle dark overlay */
+      background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4));
       z-index: 1;
   }
 }
 
 .login-intro-content {
-    color: var(--white-color); /* White text for contrast on dark overlay */
+    color: var(--white-color);
     text-align: center;
-    max-width: 500px; /* Limit text width for readability */
-    z-index: 2; /* Ensure text is above the overlay */
+    max-width: 500px;
+    z-index: 2;
 }
 
 .intro-welcome-text {
-    font-size: 3rem; /* Large and welcoming */
+    font-size: 3rem;
     font-weight: 700;
     margin-bottom: var(--spacing-md);
     line-height: 1.2;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Subtle text shadow for readability */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .intro-description {
-    font-size: 1.15rem; /* Slightly larger description */
+    font-size: 1.15rem;
     line-height: 1.6;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     margin-bottom: var(--spacing-xl);
 }
 
-/* --- Right Panel: Login Form --- */
 .login-form-panel {
-  flex: 2; /* Takes 2 parts of the 5-part split (e.g., 40% width) */
+  flex: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--white-color); /* White background for the form side */
-  padding: var(--spacing-lg); /* Padding around the login card */
-  box-sizing: border-box; /* Include padding in width */
-  position: relative; /* For responsive adjustments */
+  background-color: var(--white-color);
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+  position: relative;
 }
 
-/* --- Login Card (No longer needs absolute centering, it's centered by its parent) --- */
 .login-card {
-  background-color: var(--white-color); /* Solid white, no transparency needed here */
+  background-color: var(--white-color);
   border-radius: var(--border-radius-xl);
-  box-shadow: none; /* No shadow needed as it's within a distinct panel */
+  box-shadow: none;
   padding: var(--spacing-xl) var(--spacing-xxl);
   width: 100%;
-  max-width: 440px; /* Max width applies to the card content */
+  max-width: 440px;
   text-align: center;
-  position: static; /* No longer needs relative/absolute positioning */
-  overflow: visible; /* Allow content like tooltips to escape */
-  backdrop-filter: none; /* No blur needed as background is solid */
+  position: static;
+  overflow: visible;
+  backdrop-filter: none;
 }
 
-/* --- Logo Section (Branding for Form Panel) --- */
 .logo-section {
   margin-bottom: var(--spacing-xl);
   padding-bottom: var(--spacing-md);
@@ -180,14 +88,14 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 }
 
 .login-logo {
-  max-width: 180px; /* Slightly smaller for the form panel */
+  max-width: 180px;
   margin-bottom: var(--spacing-md);
   margin-left: auto;
   margin-right: auto;
 }
 
 .login-title {
-  font-size: 1.75rem; /* Smaller title than intro, but prominent */
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-dark-gray);
   margin: 0;
@@ -200,7 +108,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   margin-top: var(--spacing-xs);
 }
 
-/* --- Login Form --- */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -246,7 +153,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   outline: none;
 }
 
-/* --- Forgot Password Link --- */
 .forgot-password-link {
   display: block;
   text-align: right;
@@ -260,7 +166,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   text-decoration: underline;
 }
 
-/* --- Login Button (Primary Call to Action) --- */
 .login-button {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -293,7 +198,6 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   box-shadow: none;
 }
 
-/* --- Register Text (Secondary Call to Action) --- */
 .register-text {
   font-size: 0.9375rem;
   color: var(--text-secondary-color);
@@ -305,14 +209,13 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   color: var(--link-color);
 }
 
-/* --- Responsive Adjustments --- */
-@media (max-width: 992px) { /* Adjust breakpoint for tablet/smaller desktop */
+@media (max-width: 992px) {
     .login-visual-panel {
-        flex: 2; /* Shrink visual panel slightly */
+        flex: 2;
         min-width: 300px;
     }
     .login-form-panel {
-        flex: 3; /* Give more space to form */
+        flex: 3;
     }
     .intro-welcome-text {
         font-size: 2.5rem;
@@ -326,53 +229,52 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 }
 
 
-@media (max-width: 768px) { /* Collapse to stacked layout on mobile */
+@media (max-width: 768px) {
   .login-page-wrapper {
-    flex-direction: column; /* Stack panels vertically */
-    padding: 0; /* Remove overall padding, panels will handle it */
-    overflow-y: auto; /* Allow scrolling */
+    flex-direction: column;
+    padding: 0;
+    overflow-y: auto;
   }
 
   .login-visual-panel {
-    flex: none; /* No flex sizing */
-    width: 100%; /* Take full width */
-    min-height: 250px; /* Minimum height for the visual section on mobile */
-    max-height: 40vh; /* Max height to ensure form is visible */
-    background-size: cover; /* Ensure image covers the smaller area */
-    background-position: center top; /* Position image to show top part on mobile */
-    padding: var(--spacing-lg); /* Padding for intro content */
+    flex: none;
+    width: 100%;
+    min-height: 250px;
+    max-height: 40vh;
+    background-size: cover;
+    background-position: center top;
+    padding: var(--spacing-lg);
   }
 
   .login-intro-content {
       text-align: center;
-      max-width: 90%; /* Adjust max-width */
+      max-width: 90%;
   }
 
   .intro-welcome-text {
-      font-size: 2rem; /* Smaller on mobile */
+      font-size: 2rem;
       margin-bottom: var(--spacing-sm);
   }
 
   .intro-description {
-      font-size: 0.9rem; /* Smaller description text */
+      font-size: 0.9rem;
   }
   
-  /* Form Panel on Mobile */
   .login-form-panel {
-    flex: none; /* No flex sizing */
-    width: 100%; /* Take full width */
-    padding: var(--spacing-lg); /* Padding around the card */
-    justify-content: flex-start; /* Start from top of available space */
-    align-items: center; /* Center card horizontally */
+    flex: none;
+    width: 100%;
+    padding: var(--spacing-lg);
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .login-card {
-    border-radius: var(--border-radius-md); /* Smaller border-radius on mobile */
-    box-shadow: none; /* Remove shadow on mobile */
-    padding: var(--spacing-lg) var(--spacing-xl); /* Adjusted padding */
-    margin-top: var(--spacing-md); /* Space from visual panel above */
-    margin-bottom: var(--spacing-md); /* Space at bottom */
-    max-width: 100%; /* Ensure it fits within mobile screen */
+    border-radius: var(--border-radius-md);
+    box-shadow: none;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    max-width: 100%;
   }
 
   .logo-section {
@@ -381,23 +283,23 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   }
 
   .login-logo {
-    max-width: 120px; /* Even smaller logo on mobile */
+    max-width: 120px;
   }
 
   .login-title {
-    font-size: 1.25rem; /* Smaller title */
+    font-size: 1.25rem;
   }
 
   .login-subtitle, .input-label, .input-field, .forgot-password-link, .login-button, .register-text {
-    font-size: 0.875rem; /* Consistent smaller font sizes */
+    font-size: 0.875rem;
   }
 
   .input-field, .login-button {
-    height: 44px; /* Slightly smaller height */
+    height: 44px;
   }
 
   .login-form {
-    gap: var(--spacing-sm); /* Tighter spacing on mobile */
+    gap: var(--spacing-sm);
     margin-top: var(--spacing-lg);
   }
 

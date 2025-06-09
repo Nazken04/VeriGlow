@@ -1,82 +1,70 @@
-/* src/styles/MainLayout.css */
 .app-layout-container {
     display: flex;
     min-height: 100vh;
-    background-color: var(--background-color); /* Overall app background */
+    background-color: var(--background-color);
 }
 
 .main-content-area {
     flex-grow: 1;
-    margin-left: 260px; /* Space for the fixed sidebar */
+    margin-left: 260px;
     display: flex;
     flex-direction: column;
-    transition: margin-left 0.3s ease; /* For potential sidebar collapse */
+    transition: margin-left 0.3s ease;
 }
 
 .page-content {
     flex-grow: 1;
-    padding: var(--spacing-lg); /* Padding around the main page content */
-    /* Ensure content below Navbar/Top Bar has space */
-    padding-top: calc(64px + var(--spacing-lg)); /* 64px for Top Bar height + padding */
-    position: relative; /* Ensure it's relative for Top Bar positioning */
+    padding: var(--spacing-lg);
+    padding-top: calc(64px + var(--spacing-lg));
+    position: relative;
 }
 
-/* --- Top Bar specific styles --- */
-.navbar-container.top-bar { /* Target the Navbar when it's the top bar */
+.navbar-container.top-bar {
     background-color: white;
-    position: fixed; /* Fix the top bar */
+    position: fixed;
     top: 0;
-    left: 260px; /* Aligns with the sidebar's right edge */
-    right: 0; /* Stretches to the very right edge of the viewport */
+    left: 260px;
+    right: 0;
     height: 64px;
-    z-index: 40; /* Below sidebar but above content */
+    z-index: 40;
     padding-left: var(--spacing-lg);
     padding-right: var(--spacing-lg);
-    box-shadow: none; /* Remove shadow from top bar */
-    border-bottom: 1px solid var(--border-color); /* Add border instead */
-    transition: left 0.3s ease; /* For sidebar collapse */
-    display: flex; /* Ensure it's a flex container */
-    justify-content: flex-end; /* Pushes content to the far right */
-    align-items: center; /* Vertically centers the content */
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-color);
+    transition: left 0.3s ease;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
-/* Hide elements within the top-bar that belong to the main Navbar component (like brand/nav links) */
-/* This is important because the "VeriGlow" logo is in the sidebar, not in this top bar. */
 .navbar-container.top-bar .navbar-brand,
 .navbar-container.top-bar .nav-links-wrapper,
 .navbar-container.top-bar .menu-icon {
     display: none;
 }
 
-/* All .top-bar-search related styles are removed as search is deleted */
-
-/* User name on desktop (in top bar) */
 .navbar-user-actions .user-name-desktop {
-    display: inline; /* Ensure name shows */
+    display: inline;
 }
 
-/* Responsive Layout */
 @media (max-width: 768px) {
     .main-content-area {
-        margin-left: 0; /* No margin on mobile */
+        margin-left: 0;
     }
 
     .navbar-container.top-bar {
-        left: 0; /* Full width top bar on mobile */
-        justify-content: flex-end; /* Push user actions right */
-        padding: var(--spacing-sm) var(--spacing-md); /* Adjust padding */
+        left: 0;
+        justify-content: flex-end;
+        padding: var(--spacing-sm) var(--spacing-md);
     }
-
-    /* .top-bar-search (hidden in mobile media query was removed entirely from source, no need for this rule) */
 
     .page-content {
         padding: var(--spacing-md);
         padding-top: calc(64px + var(--spacing-md));
     }
 
-    /* Additional mobile adjustments for top bar */
     .navbar-container.top-bar .navbar-user-actions {
-        justify-content: flex-end; /* Align to the right on mobile */
-        width: 100%; /* Take full available width */
+        justify-content: flex-end;
+        width: 100%;
     }
 }

@@ -1,4 +1,3 @@
-// src/redux/reducers/productReducer.js - (Your provided code, looks fine)
 import {
   PRODUCT_REGISTER_REQUEST,
   PRODUCT_REGISTER_SUCCESS,
@@ -6,7 +5,7 @@ import {
   GET_PRODUCTS_REQUEST,
   GET_PRODUCTS_SUCCESS,
   GET_PRODUCTS_FAIL
-} from '../actions/types'; // Correctly imports from types.js
+} from '../actions/types'; 
 
 const initialState = {
   products: [],
@@ -35,9 +34,7 @@ const productReducer = (state = initialState, action) => {
         ...state,
         registerLoading: false,
         registerSuccess: true,
-        // Optionally update products list if the payload contains the new product
-        // products: action.payload.product ? [...state.products, action.payload.product] : state.products,
-        error: null // Clear previous general errors
+        error: null 
       };
     case PRODUCT_REGISTER_FAIL:
       return {
@@ -64,12 +61,10 @@ const productReducer = (state = initialState, action) => {
           error: null
         };
       } else {
-        // This case might not be used if fetchManufacturerProducts is always for batches
-        // Or it could be for a different "get all products flat" action
         return {
           ...state,
           loading: false,
-          products: action.payload || [], // Assuming payload is an array of products
+          products: action.payload || [], 
           error: null
         };
       }

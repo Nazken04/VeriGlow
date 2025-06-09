@@ -1,4 +1,3 @@
-/* src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
@@ -14,7 +13,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for webkit browsers (optional, for aesthetics) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -31,7 +29,6 @@ body {
   background: #a1a1a1;
 }
 
-/* Styling for date input placeholder (browser support varies) */
 input[type="date"]::-webkit-input-placeholder {
   color: #9CA3AF; /* Tailwind gray-400 */
 }
@@ -44,10 +41,4 @@ input[type="date"]:-ms-input-placeholder {
 }
 input[type="date"]::placeholder {
   color: #9CA3AF;
-}
-/* Hide default date icon for custom styling if needed, but Tailwind might handle this well */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  /* You might want to hide this if you're adding your own icon absolutely positioned */
-  /* opacity: 0; */
-  /* cursor: pointer; */
 }

@@ -1,9 +1,7 @@
-// src/components/fraud-reports/FraudReports.js
 
 import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux'; // Import useDispatch and useSelector
-// Removed direct API imports: getManufacturerReportsAPI, getProductDetailsAPI
-import { fetchFraudReports } from '../../redux/actions/fraudReportsActions'; // Import the new action
+import { useDispatch, useSelector } from 'react-redux'; 
+import { fetchFraudReports } from '../../redux/actions/fraudReportsActions'; 
 import { FaSortUp, FaSortDown } from 'react-icons/fa'; 
 
 import jsPDF from 'jspdf';
@@ -12,7 +10,6 @@ import * as XLSX from 'xlsx';
 
 import "../../styles/FraudReports.css";
 
-// Helper to parse dates robustly (copied to common actions/utils if possible)
 const parseDateRobustly = (dateValue) => {
     if (!dateValue) return null;
     if (Number.isFinite(dateValue)) {
@@ -32,7 +29,6 @@ const parseDateRobustly = (dateValue) => {
     return !isNaN(fallbackDate.getTime()) ? fallbackDate : null;
 };
 
-// Helper to debounce functions
 const debounce = (func, delay) => {
     let timeout;
     return function(...args) {
@@ -42,9 +38,7 @@ const debounce = (func, delay) => {
     };
 };
 
-/**
- * Reusable Modal component.
- */
+
 const Modal = ({ isOpen, onClose, children, title, className = '' }) => {
     if (!isOpen) return null;
 
@@ -65,9 +59,7 @@ const Modal = ({ isOpen, onClose, children, title, className = '' }) => {
     );
 };
 
-/**
- * Simple Toast Notification component (copied from Products.js design).
- */
+
 const Toast = ({ message, type = 'success', show, onClose }) => {
     useEffect(() => {
         if (show) {
@@ -99,7 +91,6 @@ const Toast = ({ message, type = 'success', show, onClose }) => {
     );
 };
 
-// Functions to format scan history and locations (kept here for now, can be moved to utils)
 const formatUserScanDetails = (scanHistory) => {
     if (!scanHistory || scanHistory.length === 0) {
         return { summary: 'N/A', full: 'N/A', expanded: 'N/A' };
@@ -180,8 +171,7 @@ const formatReportedLocations = (locationsArray) => {
 
 
 const FraudReports = () => {
-  const dispatch = useDispatch(); // Initialize useDispatch
-  // Get data from Redux store
+  const dispatch = useDispatch(); 
   const { allReportsWithDetails, loading: reportsLoading, error: reportsError } = useSelector((state) => state.reports);
 
   const [expandedRowId, setExpandedRowId] = useState(null);
@@ -289,7 +279,7 @@ const FraudReports = () => {
   };
 
   const filteredAndSortedReports = useMemo(() => {
-    let currentList = [...allReportsWithDetails]; // Get data from Redux
+    let currentList = [...allReportsWithDetails]; 
 
     if (searchTerm) {
       const lowerCaseSearchTerm = searchTerm.toLowerCase();
@@ -356,10 +346,9 @@ const FraudReports = () => {
     return currentList;
   }, [allReportsWithDetails, searchTerm, activeDateFilter, customStartDate, customEndDate, sortConfig]);
 
-  // Effect to fetch initial data using Redux action
   useEffect(() => {
-    dispatch(fetchFraudReports()); // Dispatch the action to populate Redux store
-  }, [dispatch]); // Run once on component mount
+    dispatch(fetchFraudReports()); 
+  }, [dispatch]); 
 
   const totalPages = Math.ceil(filteredAndSortedReports.length / itemsPerPage);
   const paginatedReports = useMemo(() => {

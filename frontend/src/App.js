@@ -21,29 +21,22 @@ function App() {
     <Provider store={store}>
       <Router>
         <Routes>
-          {/* Public Routes (no layout/sidebar) */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/verify-email" element={<VerificationPage />} /> {/* Typically has a token param: /verify-email/:token */}
+          <Route path="/verify-email" element={<VerificationPage />} /> 
 
-
-          {/* Authenticated Routes (wrapped by MainLayout) */}
-          {/* MainLayout handles checking auth, fetching user profile on refresh, and rendering Navbar/Sidebar */}
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/product-register" element={<ProductRegister />} />
             <Route path="/product" element={<ManufacturerProducts />} />
             <Route path="/fraud-reports" element={<FraudReports />} />
-            {/* Set dashboard as the default route for authenticated users */}
             <Route path="/" element={<Dashboard />} />
-            {/* Add any other authenticated routes here */}
           </Route>
 
-          {/* Fallback for unmatched routes */}
-          <Route path="*" element={<div>404 Not Found</div>} /> {/* Simple 404 page */}
+          <Route path="*" element={<div>404 Not Found</div>} /> 
 
         </Routes>
-        <ToastContainer /> {/* ToastContainer should be rendered once at the root level */}
+        <ToastContainer /> 
       </Router>
     </Provider>
   );

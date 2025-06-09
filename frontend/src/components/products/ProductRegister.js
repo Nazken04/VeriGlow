@@ -1,24 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerProduct } from '../../redux/actions/productActions';
-import { toast } from 'react-toastify'; // Ensure react-toastify is imported
-import 'react-toastify/dist/ReactToastify.css'; // Don't forget to import its CSS
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FaPlus, FaMinus, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
-// IMPORTANT: For react-toastify to work, you MUST include <ToastContainer />
-// in your main App.js or a top-level component. Example in App.js:
-// import { ToastContainer } from 'react-toastify';
-// function App() {
-//   return (
-//     <>
-//       <Router>
-//         {/* Your routes */}
-//       </Router>
-//       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-//     </>
-//   );
-// }
 
 import "../../styles/ProductRegister.css";
 
@@ -71,7 +57,6 @@ const ProductRegister = () => {
     const newErrors = {};
     const { productName, manufacturingDate, expiryDate, ingredients, amount, imageUrl } = formData;
 
-    // Required fields
     if (!productName.trim()) newErrors.productName = 'Product name is required.';
     if (!manufacturingDate) newErrors.manufacturingDate = 'Manufacturing date is required.';
     if (!expiryDate) newErrors.expiryDate = 'Expiry date is required.';
@@ -80,7 +65,6 @@ const ProductRegister = () => {
     }
     if (amount < 1) newErrors.amount = 'Amount must be at least 1.';
 
-    // Date logic
     if (manufacturingDate && expiryDate) {
       const manDateObj = new Date(manufacturingDate);
       const expDateObj = new Date(expiryDate);
@@ -92,7 +76,6 @@ const ProductRegister = () => {
       }
     }
 
-    // Image URL validation (now REQUIRED)
     if (!imageUrl.trim()) {
         newErrors.imageUrl = 'Product image URL is required.';
     } else if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(imageUrl)) {
@@ -103,9 +86,7 @@ const ProductRegister = () => {
     setIsFormValid(Object.keys(newErrors).length === 0);
   }, [formData, today]);
 
-  // Auto-suggestion effects
   useEffect(() => {
-    // Auto-suggest Expiry Date
     if (formData.productName && formData.manufacturingDate) {
       const suggestedExp = suggestExpiryDate(formData.productName, formData.manufacturingDate);
       if (suggestedExp && formData.expiryDate !== suggestedExp) {
@@ -117,8 +98,6 @@ const ProductRegister = () => {
     }
   }, [formData.productName, formData.manufacturingDate]);
 
-
-  // Event Handlers
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prev => ({
@@ -145,9 +124,6 @@ const ProductRegister = () => {
         ...prev,
         ingredients: [...prev.ingredients, trimmedIngredient]
       }));
-      // Only clear the text input state here if we are adding from the text input itself
-      // If called from quick-add, it will be handled by setting ingredientInput to '' after check
-      // For now, let's keep it controlled. Clearing input happens below explicitly if needed.
     }
   };
 
@@ -155,7 +131,7 @@ const ProductRegister = () => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       addIngredient(ingredientInput);
-      setIngredientInput(''); // Clear input after adding via Enter/Comma
+      setIngredientInput('');
     } else if (e.key === 'Backspace' && ingredientInput === '' && formData.ingredients.length > 0) {
       setFormData(prev => ({
         ...prev,
@@ -164,20 +140,17 @@ const ProductRegister = () => {
     }
   };
 
-  // MODIFIED: To handle both typed input and quick-add
   const handleIngredientQuickAdd = (e) => {
-    // First, add any ingredient currently being typed in the text input field
     if (ingredientInput.trim()) {
       addIngredient(ingredientInput);
-      setIngredientInput(''); // Clear the text input after adding its content
+      setIngredientInput('');
     }
 
-    // Then, add the selected quick-add ingredient
     const selectedIngredient = e.target.value;
-    if (selectedIngredient && selectedIngredient !== "") { // Ensure a valid option was selected (not the default empty option)
+    if (selectedIngredient && selectedIngredient !== "") {
       addIngredient(selectedIngredient);
     }
-    e.target.value = ''; // Reset the select dropdown to its default "Select an ingredient" option
+    e.target.value = '';
   };
 
   const removeIngredient = (ingredientToRemove) => {
@@ -194,17 +167,16 @@ const ProductRegister = () => {
       return;
     }
 
-    // Add any remaining typed ingredient before submitting if user didn't press enter/comma
     if (ingredientInput.trim()) {
         addIngredient(ingredientInput);
-        setIngredientInput(''); // Clear after adding
+        setIngredientInput('');
     }
 
     const productData = {
       product_name: formData.productName,
       manufacturing_date: formData.manufacturingDate,
       expiry_date: formData.expiryDate,
-      ingredients: formData.ingredients.join(', '), // Convert array to string
+      ingredients: formData.ingredients.join(', '),
       amount: formData.amount,
       image_url: formData.imageUrl
     };
@@ -244,7 +216,6 @@ const ProductRegister = () => {
 
   return (
     <div className="product-register-container">
-      {/* Page Header consistent with Batch Overview */}
       <div className="page-header">
         <h1>Register New Product Batch</h1>
         <button className="secondary-button back-to-overview" onClick={() => navigate('/product')}>
@@ -252,11 +223,9 @@ const ProductRegister = () => {
         </button>
       </div>
 
-      {/* Main Form Area */}
       <div className="registration-form-card">
         <form onSubmit={handleSubmit} noValidate>
 
-          {/* Section: Product Information */}
           <div className="form-section">
             <h3>Product Information</h3>
             <div className="form-group full-width-group">
@@ -272,7 +241,6 @@ const ProductRegister = () => {
               {errors.productName && <span className="error-message">{errors.productName}</span>}
             </div>
 
-            {/* Product Image URL with Preview (Now REQUIRED) */}
             <div className="form-group full-width-group image-upload-group">
               <label htmlFor="imageUrl">Product Image URL <span className="required-star">*</span>:</label>
               <div className="image-input-wrapper">
@@ -304,7 +272,6 @@ const ProductRegister = () => {
             </div>
           </div>
 
-          {/* Section: Batch Details */}
           <div className="form-section">
             <h3>Batch Details</h3>
             <div className="form-row">
@@ -335,7 +302,6 @@ const ProductRegister = () => {
               </div>
             </div>
 
-            {/* Amount Stepper */}
             <div className="form-group amount-group">
               <label htmlFor="amount">Amount of Products <span className="required-star">*</span>:</label>
               <div className="amount-stepper">
@@ -358,7 +324,6 @@ const ProductRegister = () => {
             </div>
           </div>
 
-          {/* Section: Composition */}
           <div className="form-section">
             <h3>Composition</h3>
             <div className="form-group full-width-group">
@@ -402,7 +367,6 @@ const ProductRegister = () => {
               </div>
               {errors.ingredients && <span className="error-message">{errors.ingredients}</span>}
 
-              {/* Ingredient Quick-Add Dropdown */}
               <div className="ingredient-quick-add">
                 <label htmlFor="quick-add-ingredient">Quick Add Common:</label>
                 <select id="quick-add-ingredient" onChange={handleIngredientQuickAdd}>
@@ -413,13 +377,11 @@ const ProductRegister = () => {
                   <option value="Tocopherol">Tocopherol</option>
                   <option value="Hyaluronic Acid">Hyaluronic Acid</option>
                   <option value="Niacinamide">Niacinamide</option>
-                  {/* Add more common ingredients here */}
                 </select>
               </div>
             </div>
           </div>
 
-          {/* Form Actions */}
           <div className="form-actions">
             <button
               type="button"
@@ -436,7 +398,6 @@ const ProductRegister = () => {
               {registerLoading ? (
                 <>
                   <span className="spinner"></span> Registering...
-                  {/* Added message about blockchain delay */}
                   <span className="loading-info-text"> (This may take a moment as data is stored on the blockchain)</span>
                 </>
               ) : (
@@ -447,13 +408,11 @@ const ProductRegister = () => {
         </form>
       </div>
 
-      {/* Success Modal */}
       {showSuccessModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Batch Registered Successfully!</h3>
             <p>Your product batch has been successfully added to the system.</p>
-            {/* Added explicit instruction for where to view */}
             <p>You can now view and manage these products in the "Batch Overview" section.</p>
             <div className="modal-actions">
               <button className="primary-button" onClick={handleModalViewOverview}>
@@ -472,4 +431,3 @@ const ProductRegister = () => {
 };
 
 export default ProductRegister;
-
