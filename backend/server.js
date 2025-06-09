@@ -24,7 +24,7 @@ const corsOptions = {
 const allowedOrigins = [
   'http://localhost:3000', // For local frontend development
   // Placeholder for your Vercel frontend URL, you'll add this AFTER deploying frontend to Vercel
-  'https://your-veriglow-frontend-app.vercel.app', // <-- UPDATE THIS LATER
+   'https://veriglow-front-7bw6.vercel.app', // <-- UPDATE THIS LATER
   // ... any other origins for mobile apps, Postman etc.
 ];
 
