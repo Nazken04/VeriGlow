@@ -93,11 +93,7 @@ button, input, select, textarea {
 /* --- 1. Global Container & Header --- */
 .manufacturer-products-container {
   max-width: 1200px;
-  margin: var(--spacing-xl) auto;
   padding: var(--spacing-lg);
-  background-color: var(--white-color);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
   position: relative;
 }
 
@@ -698,7 +694,6 @@ button, input, select, textarea {
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 1em;
-  height: 32px;
 }
 
 .rows-per-page-selector:focus {

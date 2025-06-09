@@ -82,7 +82,6 @@
     border-bottom: 1px solid var(--border-color);
     transition: left 0.3s ease;
     /* Updated justify-content to ensure spacing */
-    justify-content: space-between; /* Ensures brand/search left, user actions right */
     align-items: center; /* Vertically align items */
 }
 

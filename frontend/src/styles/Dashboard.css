@@ -89,9 +89,6 @@ button, input, select, textarea {
 /* --- 1. Dashboard Page Container --- */
 .dashboard-page-container {
     padding: var(--spacing-lg);
-    background-color: var(--white-color);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
     overflow: hidden;
     margin: 0;
 }

@@ -566,13 +566,6 @@ const ManufacturerProducts = () => {
             <div className="page-header">
                 <div className="page-title-group">
                     <h1 className="page-title">Batch Overview</h1>
-                    <span className="info-tooltip-icon" aria-label="More information about Batch Overview">
-                        <span className="material-symbols-outlined">info</span>
-                        <span className="info-tooltip-content">
-                            This page provides a comprehensive list of all manufactured product batches.
-                            You can view details, download associated codes, and manage batches.
-                        </span>
-                    </span>
                 </div>
                 {/* Add New Batch button (top right) - redirects */}
                 <button className="primary-button" onClick={() => navigate('/product-register')}>

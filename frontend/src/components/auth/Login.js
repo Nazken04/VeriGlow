@@ -62,12 +62,7 @@ const Login = () => {
       <div className="login-form-panel">
         <div className="login-card">
           <div className="logo-section">
-            <img
-              src="/assets/veriglow-logo.svg"
-              alt="VeriGlow Logo"
-              className="login-logo"
-              onError={(e) => { e.target.onerror = null; e.target.src="/assets/veriglow-logo-fallback.svg"; }}
-            />
+            
             <h1 className="login-title">Sign In</h1>
             <p className="login-subtitle">Access your account to continue.</p>
           </div>

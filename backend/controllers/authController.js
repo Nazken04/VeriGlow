@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto'); // For generating random tokens
+const crypto = require('crypto'); 
 const User = require('../models/userModel');
-const sendEmail = require('../utils/sendEmail'); // Make sure this path is correct
+const sendEmail = require('../utils/sendEmail'); 
 
 // Register a new user
 exports.register = async (req, res) => {
@@ -11,16 +11,12 @@ exports.register = async (req, res) => {
   try {
     const userExists = await User.findOne({ email });
     if (userExists) {
-      // If user exists but is not verified, you could resend the email here.
-      // For simplicity, we just say user exists.
       return res.status(400).json({ message: 'User already exists with this email address.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate unique verification token
     const verificationToken = crypto.randomBytes(32).toString('hex');
-    // Token valid for 24 hours (3600000 ms * 24 hours)
     const verificationTokenExpires = Date.now() + (3600000 * 24); 
 
     const newUser = new User({
@@ -37,7 +33,6 @@ exports.register = async (req, res) => {
 
     await newUser.save();
 
-    // Construct verification URL
     const verificationUrl = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
 
     const message = `
@@ -59,8 +54,6 @@ exports.register = async (req, res) => {
       });
     } catch (emailErr) {
       console.error("Email sending failed:", emailErr);
-      // If email sending fails, you might want to log this but still indicate
-      // that registration data was saved. User will need to resend.
       res.status(500).json({ 
         message: 'Registration successful, but failed to send verification email. Please try to resend the email later.' 
       });
@@ -72,24 +65,22 @@ exports.register = async (req, res) => {
   }
 };
 
-// Login user and generate JWT token
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log(`[AUTH] Attempting login for email: ${email}`); // NEW LOG
+  console.log(`[AUTH] Attempting login for email: ${email}`); 
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      console.log(`[AUTH] Login failed: User not found for email: ${email}`); // NEW LOG
+      console.log(`[AUTH] Login failed: User not found for email: ${email}`); 
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    console.log(`[AUTH] User found: ${user.email}, isVerified: ${user.isVerified}`); // NEW LOG
+    console.log(`[AUTH] User found: ${user.email}, isVerified: ${user.isVerified}`); 
 
-    // --- CRUCIAL: CHECK IF USER IS VERIFIED ---
     if (!user.isVerified) {
-      console.log(`[AUTH] Login denied: Email not verified for user: ${user.email}`); // NEW LOG
+      console.log(`[AUTH] Login denied: Email not verified for user: ${user.email}`); 
       return res.status(403).json({ 
         message: 'Please verify your email address before logging in. Check your inbox for a verification link.',
         requiresVerification: true // Frontend can use this flag
@@ -98,24 +89,23 @@ exports.login = async (req, res) => {
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      console.log(`[AUTH] Login failed: Invalid password for user: ${user.email}`); // NEW LOG
+      console.log(`[AUTH] Login failed: Invalid password for user: ${user.email}`); 
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log(`[AUTH] Login successful for user: ${user.email}`); // NEW LOG
+    console.log(`[AUTH] Login successful for user: ${user.email}`); 
     res.json({ token, user: { id: user._id, email: user.email, name: user.name, role: user.role, isVerified: user.isVerified } }); 
   } catch (err) {
-    console.error(`[AUTH] Server error during login for email ${email}:`, err); // NEW LOG
+    console.error(`[AUTH] Server error during login for email ${email}:`, err); 
     res.status(500).json({ message: 'Server error during login.' });
   }
 };
 
-// Verify Email Endpoint (User clicks link in email)
 exports.verifyEmail = async (req, res) => {
   const { token } = req.params;
 
-  console.log(`[AUTH] Attempting email verification for token: ${token}`); // NEW LOG
+  console.log(`[AUTH] Attempting email verification for token: ${token}`); 
 
   try {
     const user = await User.findOne({ 
@@ -124,26 +114,25 @@ exports.verifyEmail = async (req, res) => {
     });
 
     if (!user) {
-      console.log(`[AUTH] Verification failed: Invalid or expired token ${token}`); // NEW LOG
+      console.log(`[AUTH] Verification failed: Invalid or expired token ${token}`); 
       return res.status(400).json({ message: 'Invalid or expired verification token.' });
     }
 
-    console.log(`[AUTH] User found for verification: ${user.email}. Setting isVerified to true.`); // NEW LOG
+    console.log(`[AUTH] User found for verification: ${user.email}. Setting isVerified to true.`); 
     user.isVerified = true; 
     user.verificationToken = undefined;
     user.verificationTokenExpires = undefined;
 
     await user.save();
-    console.log(`[AUTH] User ${user.email} successfully verified and saved to DB.`); // NEW LOG
+    console.log(`[AUTH] User ${user.email} successfully verified and saved to DB.`); 
 
     res.status(200).json({ message: 'Email verified successfully! You can now log in.' });
   } catch (err) {
-    console.error(`[AUTH] Server error during email verification for token ${token}:`, err); // NEW LOG
+    console.error(`[AUTH] Server error during email verification for token ${token}:`, err); 
     res.status(500).json({ message: 'Server error during email verification.' });
   }
 };
 
-// Resend Verification Email Endpoint
 exports.resendVerificationEmail = async (req, res) => {
   const { email } = req.body;
 
@@ -158,15 +147,13 @@ exports.resendVerificationEmail = async (req, res) => {
       return res.status(400).json({ message: 'Your email is already verified. Please log in.' });
     }
 
-    // Generate new verification token
     const verificationToken = crypto.randomBytes(32).toString('hex');
-    const verificationTokenExpires = Date.now() + (3600000 * 24); // New token expires in 24 hours
+    const verificationTokenExpires = Date.now() + (3600000 * 24); 
 
     user.verificationToken = verificationToken;
     user.verificationTokenExpires = verificationTokenExpires;
     await user.save();
 
-    // Send new verification email
     const verificationUrl = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
     const message = `
       <h1>VeriGlow Account Verification (Resent)</h1>
@@ -190,11 +177,10 @@ exports.resendVerificationEmail = async (req, res) => {
   }
 };
 
-// User profile (ensure it returns isVerified status)
 exports.profile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id)
-      .select('-password -verificationToken -verificationTokenExpires') // Do not send sensitive/internal fields
+      .select('-password -verificationToken -verificationTokenExpires') 
       .populate({
         path: 'reports.product',
         select: 'product_name batch_number qr_code'
@@ -210,7 +196,7 @@ exports.profile = async (req, res) => {
       business_name: user.business_name,
       registration_number: user.registration_number,
       contact_number: user.contact_number,
-      isVerified: user.isVerified, // Include verification status in profile
+      isVerified: user.isVerified, 
       reports: user.reports
     });
   } catch (err) {

@@ -1,4 +1,3 @@
-
 const QRCode = require('qrcode');
 const Product = require('../models/productModel');
 const blockchainService = require('../services/blockchainService');
@@ -10,19 +9,21 @@ exports.registerProduct = async (req, res) => {
   const { product_name, manufacturing_date, expiry_date, ingredients, amount, image_url } = req.body;
 
   try {
-    if (!req.user.business_name) {
+    if (!req.user || !req.user.business_name) {
       return res.status(403).json({ message: 'Only manufacturers can register products' });
     }
 
-    const batchNumber = `${product_name.replace(/\s+/g, '-')}-${Date.now()}`;
+    const batchNumber = Date.now().toString();
+
+    const barcodeCanvas = createCanvas();
+    JsBarcode(barcodeCanvas, batchNumber, { format: "CODE128", displayValue: true });
+    const batchBarcodeImage = barcodeCanvas.toDataURL();
+
     const products = [];
 
     for (let i = 0; i < amount; i++) {
-      const productId = `PRD-${Date.now()}-${i + 1}`;
-      const canvas = createCanvas();
-      JsBarcode(canvas, productId, { format: "CODE128", displayValue: true });
-      const barcodeImage = canvas.toDataURL();
-      
+      const productId = `${Date.now()}${i + 1}`;
+
       const qrString = productId;
       const qrImage = await QRCode.toDataURL(qrString);
 
@@ -35,8 +36,8 @@ exports.registerProduct = async (req, res) => {
         image_url,
         qr_code: qrString,
         qr_code_image: qrImage,
-        barcode: productId,
-        barcode_image: barcodeImage,
+        barcode: batchNumber,
+        barcode_image: batchBarcodeImage,
         manufacturer: req.user._id,
         scanHistory: [],
         isCounterfeit: false,
@@ -48,7 +49,7 @@ exports.registerProduct = async (req, res) => {
     }
 
     for (const product of products) {
-      await blockchainService.registerProduct(product); 
+      await blockchainService.registerProduct(product);
     }
 
     res.status(201).json({
@@ -181,8 +182,6 @@ exports.getProductsByBatchNumber = async (req, res) => {
   }
 };
 
-// Helper function for counterfeit detection and reporting
-// Returns true if it saved the product (due to counterfeit status change), false otherwise.
 async function updateCounterfeitStatus(product) {
   const validScans = product.scanHistory.filter(s => s && s.userId && s.location && s.date instanceof Date);
 
@@ -230,14 +229,13 @@ async function updateCounterfeitStatus(product) {
         }},
         { new: true } 
       );
-    } else { // Already counterfeit, update the report
+    } else {
       product.counterfeitReports = [newReportData]; 
       await product.save();
     }
-    return true; // Indicates counterfeit status active/updated and product was saved
+    return true; 
   }
-  // If condition is not met, product remains as is (or wasn't changed by this function)
-  return false; // Indicates conditions not met, product was NOT saved by this function
+  return false; 
 }
 
 
@@ -255,24 +253,20 @@ exports.verifyProduct = async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    if (!req.user.business_name) { // Consumer scan
+    if (!req.user.business_name) {
       const scanEntry = {
         userId: userId,
         date: new Date(),
         location: location 
       };
-      product.scanHistory.push(scanEntry); // Modify in-memory
+      product.scanHistory.push(scanEntry);
       
-      // updateCounterfeitStatus returns true if it saved the product
       const savedByUpdateCounterfeit = await updateCounterfeitStatus(product); 
       
       if (!savedByUpdateCounterfeit) {
-        // If updateCounterfeitStatus didn't save (e.g., criteria not met),
-        // we still need to save to persist the new scanHistory entry.
         await product.save();
       }
-      // If savedByUpdateCounterfeit is true, product was already saved.
-    } else { // Manufacturer verification (does not add to scan history for counterfeit detection)
+    } else {
       console.log(`Manufacturer ${req.user.business_name} verified product ${product.product_name}`);
     }
 
@@ -290,7 +284,7 @@ exports.verifyProduct = async (req, res) => {
           if (scan.userId) {
             scanUserIdStr = scan.userId.toString();
           }
-        } else if (scan instanceof Date) { // Handle potential old format
+        } else if (scan instanceof Date) {
           dateToFormat = scan;
         } else {
           console.warn('Unrecognized scan entry format in product.scanHistory:', scan);
@@ -375,7 +369,7 @@ exports.getProductDetails = async (req, res) => {
             dateIso = scan.date.toISOString();
             location = scan.location || 'Unknown';
             userIdStr = scan.userId ? scan.userId.toString() : 'Unknown';
-        } else if (scan instanceof Date) { // Handle potential old format
+        } else if (scan instanceof Date) {
             dateIso = scan.toISOString();
         } else {
             return { error: 'Invalid scan entry' };
@@ -421,17 +415,13 @@ exports.scanProduct = async (req, res) => {
       date: new Date(),
       location: location
     };
-    product.scanHistory.push(scanEntry); // Modify in-memory
+    product.scanHistory.push(scanEntry);
     
-    // updateCounterfeitStatus returns true if it saved the product
     const savedByUpdateCounterfeit = await updateCounterfeitStatus(product); 
     
     if (!savedByUpdateCounterfeit) {
-      // If updateCounterfeitStatus didn't save (e.g., criteria not met),
-      // we still need to save to persist the new scanHistory entry.
       await product.save();
     }
-    // If savedByUpdateCounterfeit is true, product was already saved.
     
     const isBlockchainValid = await blockchainService.verifyProduct(product_code); 
     

@@ -1,13 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerProduct } from '../../redux/actions/productActions'; // Assuming this path is correct
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FaPlus, FaMinus, FaInfoCircle, FaTimesCircle } from 'react-icons/fa'; // For stepper, info icons, and clear tag icon
-import { useNavigate } from 'react-router-dom'; // Assuming you use react-router for navigation
+import { registerProduct } from '../../redux/actions/productActions';
+import { toast } from 'react-toastify'; // Ensure react-toastify is imported
+import 'react-toastify/dist/ReactToastify.css'; // Don't forget to import its CSS
+import { FaPlus, FaMinus, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-// IMPORTANT: Ensure this path is correct relative to your component
-// This CSS file will contain all the new styling for the redesigned form.
+// IMPORTANT: For react-toastify to work, you MUST include <ToastContainer />
+// in your main App.js or a top-level component. Example in App.js:
+// import { ToastContainer } from 'react-toastify';
+// function App() {
+//   return (
+//     <>
+//       <Router>
+//         {/* Your routes */}
+//       </Router>
+//       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+//     </>
+//   );
+// }
+
 import "../../styles/ProductRegister.css";
 
 const ProductRegister = () => {
@@ -26,39 +38,35 @@ const ProductRegister = () => {
 
   const [errors, setErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
-  const [ingredientInput, setIngredientInput] = useState(''); // State for current ingredient typing
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [ingredientInput, setIngredientInput] = useState('');
 
-  // Refs for tooltips/info icons
   const ingredientTooltipRef = useRef(null);
   const [showIngredientTooltip, setShowIngredientTooltip] = useState(false);
 
-  // --- Utility Functions ---
   const today = new Date().toISOString().split('T')[0];
 
   const suggestExpiryDate = (productName, manufacturingDate) => {
     if (!manufacturingDate) return '';
     const manDate = new Date(manufacturingDate);
-    let shelfLifeMonths = 12; // Default for 'Face Mask' (from example)
+    let shelfLifeMonths = 12;
     const lowerCaseProductName = productName.toLowerCase();
 
     if (lowerCaseProductName.includes('eyesha') || lowerCaseProductName.includes('eyeshadow')) {
-      shelfLifeMonths = 36; // Example rule: Eyeshadow lasts 36 months
+      shelfLifeMonths = 36;
     } else if (lowerCaseProductName.includes('mask') || lowerCaseProductName.includes('face mask')) {
-      shelfLifeMonths = 12; // Example rule: Face mask lasts 12 months
-    } else if (lowerCaseProductName.includes('lipstick')) { // Another example
+      shelfLifeMonths = 12;
+    } else if (lowerCaseProductName.includes('lipstick')) {
       shelfLifeMonths = 24;
     }
 
     manDate.setMonth(manDate.getMonth() + shelfLifeMonths);
-    // Ensure date is valid (e.g., if adding months goes past end of month, it adjusts)
     const day = String(manDate.getDate()).padStart(2, '0');
     const month = String(manDate.getMonth() + 1).padStart(2, '0');
     const year = manDate.getFullYear();
     return `${year}-${month}-${day}`;
   };
 
-  // --- Validation Logic (Improved) ---
   useEffect(() => {
     const newErrors = {};
     const { productName, manufacturingDate, expiryDate, ingredients, amount, imageUrl } = formData;
@@ -85,7 +93,7 @@ const ProductRegister = () => {
     }
 
     // Image URL validation (now REQUIRED)
-    if (!imageUrl.trim()) { // Check if imageUrl is empty
+    if (!imageUrl.trim()) {
         newErrors.imageUrl = 'Product image URL is required.';
     } else if (!/^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(imageUrl)) {
         newErrors.imageUrl = 'Please enter a valid URL.';
@@ -95,13 +103,12 @@ const ProductRegister = () => {
     setIsFormValid(Object.keys(newErrors).length === 0);
   }, [formData, today]);
 
-  // --- Auto-suggestion effects ---
+  // Auto-suggestion effects
   useEffect(() => {
     // Auto-suggest Expiry Date
     if (formData.productName && formData.manufacturingDate) {
       const suggestedExp = suggestExpiryDate(formData.productName, formData.manufacturingDate);
       if (suggestedExp && formData.expiryDate !== suggestedExp) {
-        // Only auto-fill if the user hasn't explicitly set it or it's empty
         setFormData(prev => ({
           ...prev,
           expiryDate: suggestedExp
@@ -111,7 +118,7 @@ const ProductRegister = () => {
   }, [formData.productName, formData.manufacturingDate]);
 
 
-  // --- Event Handlers ---
+  // Event Handlers
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prev => ({
@@ -123,7 +130,7 @@ const ProductRegister = () => {
   const handleAmountChange = (newAmount) => {
     setFormData(prev => ({
       ...prev,
-      amount: Math.max(1, newAmount) // Ensure amount is always at least 1
+      amount: Math.max(1, newAmount)
     }));
   };
 
@@ -138,21 +145,39 @@ const ProductRegister = () => {
         ...prev,
         ingredients: [...prev.ingredients, trimmedIngredient]
       }));
-      setIngredientInput(''); // Clear input after adding
+      // Only clear the text input state here if we are adding from the text input itself
+      // If called from quick-add, it will be handled by setting ingredientInput to '' after check
+      // For now, let's keep it controlled. Clearing input happens below explicitly if needed.
     }
   };
 
   const handleIngredientKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault(); // Prevent form submission on Enter
+      e.preventDefault();
       addIngredient(ingredientInput);
+      setIngredientInput(''); // Clear input after adding via Enter/Comma
     } else if (e.key === 'Backspace' && ingredientInput === '' && formData.ingredients.length > 0) {
-      // Allow backspace to remove the last tag
       setFormData(prev => ({
         ...prev,
         ingredients: prev.ingredients.slice(0, prev.ingredients.length - 1)
       }));
     }
+  };
+
+  // MODIFIED: To handle both typed input and quick-add
+  const handleIngredientQuickAdd = (e) => {
+    // First, add any ingredient currently being typed in the text input field
+    if (ingredientInput.trim()) {
+      addIngredient(ingredientInput);
+      setIngredientInput(''); // Clear the text input after adding its content
+    }
+
+    // Then, add the selected quick-add ingredient
+    const selectedIngredient = e.target.value;
+    if (selectedIngredient && selectedIngredient !== "") { // Ensure a valid option was selected (not the default empty option)
+      addIngredient(selectedIngredient);
+    }
+    e.target.value = ''; // Reset the select dropdown to its default "Select an ingredient" option
   };
 
   const removeIngredient = (ingredientToRemove) => {
@@ -162,16 +187,17 @@ const ProductRegister = () => {
     }));
   };
 
-  const handleIngredientQuickAdd = (e) => {
-    addIngredient(e.target.value);
-    e.target.value = ''; // Reset select to default option
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) {
       toast.error('Please fix the errors in the form before submitting.');
       return;
+    }
+
+    // Add any remaining typed ingredient before submitting if user didn't press enter/comma
+    if (ingredientInput.trim()) {
+        addIngredient(ingredientInput);
+        setIngredientInput(''); // Clear after adding
     }
 
     const productData = {
@@ -185,8 +211,9 @@ const ProductRegister = () => {
 
     const result = await dispatch(registerProduct(productData));
     if (result.success) {
-      clearForm(); // <--- ADDED: Clear form fields after successful registration
-      setShowSuccessModal(true); // Show success modal
+      toast.success(`${formData.amount} products registered successfully! You can view them in "Batch Overview".`);
+      clearForm();
+      setShowSuccessModal(true);
     } else {
       toast.error(result.error || 'Failed to register product. Please try again.');
     }
@@ -203,16 +230,16 @@ const ProductRegister = () => {
     });
     setErrors({});
     setIngredientInput('');
-    setShowSuccessModal(false); // Hide modal if open
+    setShowSuccessModal(false);
   };
 
   const handleModalViewOverview = () => {
     setShowSuccessModal(false);
-    navigate('/batch-overview'); // Navigate to batch overview page
+    navigate('/product');
   };
 
   const handleModalRegisterAnother = () => {
-    clearForm(); // Clear form and stay on page (already clears form)
+    clearForm();
   };
 
   return (
@@ -220,8 +247,7 @@ const ProductRegister = () => {
       {/* Page Header consistent with Batch Overview */}
       <div className="page-header">
         <h1>Register New Product Batch</h1>
-        <p className="subtitle">Securely register new manufacturing batches for traceability and authenticity. Please ensure all details are accurate.</p>
-        <button className="secondary-button back-to-overview" onClick={() => navigate('/batch-overview')}>
+        <button className="secondary-button back-to-overview" onClick={() => navigate('/product')}>
           Back to Batch Overview
         </button>
       </div>
@@ -255,7 +281,7 @@ const ProductRegister = () => {
                   id="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleChange}
-                  required // Added required attribute
+                  required
                   placeholder="https://example.com/image.jpg"
                   className={errors.imageUrl ? 'error-input' : ''}
                 />
@@ -268,7 +294,7 @@ const ProductRegister = () => {
                             src={formData.imageUrl}
                             alt="Product Preview"
                             className="image-preview"
-                            onError={(e) => { e.target.onerror = null; e.target.src="/path/to/default-placeholder.png"; setErrors(prev => ({...prev, imageUrl: 'Invalid image URL'})); }}
+                            onError={(e) => { e.target.onerror = null; e.target.src="https://via.placeholder.com/64x64?text=Image+Error"; setErrors(prev => ({...prev, imageUrl: 'Invalid image URL'})); }}
                         />
                     )}
                   </div>
@@ -410,6 +436,8 @@ const ProductRegister = () => {
               {registerLoading ? (
                 <>
                   <span className="spinner"></span> Registering...
+                  {/* Added message about blockchain delay */}
+                  <span className="loading-info-text"> (This may take a moment as data is stored on the blockchain)</span>
                 </>
               ) : (
                 'Register New Batch'
@@ -425,6 +453,8 @@ const ProductRegister = () => {
           <div className="modal-content">
             <h3>Batch Registered Successfully!</h3>
             <p>Your product batch has been successfully added to the system.</p>
+            {/* Added explicit instruction for where to view */}
+            <p>You can now view and manage these products in the "Batch Overview" section.</p>
             <div className="modal-actions">
               <button className="primary-button" onClick={handleModalViewOverview}>
                 View Batch Overview
@@ -442,3 +472,4 @@ const ProductRegister = () => {
 };
 
 export default ProductRegister;
+

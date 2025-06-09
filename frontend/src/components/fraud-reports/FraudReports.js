@@ -559,13 +559,6 @@ const FraudReports = () => {
       <div className="page-header">
         <div className="page-title-group">
           <h1 className="page-title">Fraud Reports Overview</h1>
-          <span className="info-tooltip-icon" aria-label="More information about Fraud Reports Overview">
-            <span className="material-symbols-outlined">info</span>
-            <span className="info-tooltip-content">
-              This page provides a comprehensive list of all detected counterfeit product reports.
-              You can view details, filter, sort, and export reports for analysis.
-            </span>
-          </span>
         </div>
         <div className="top-right-actions">
             <button
@@ -876,7 +869,7 @@ const FraudReports = () => {
       {/* Pagination Controls */}
       {!reportsLoading && !reportsError && filteredAndSortedReports.length > 0 && (
           <div className="pagination">
-              <span className="total-items-count">Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredAndSortedReports.length)} to {Math.min(currentPage * itemsPerPage, filteredAndSortedReports.length)} of {filteredAndSortedReports.length} reports</span>
+              <span className="total-items-count">Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredAndSortedReports.length)}  of {filteredAndSortedReports.length} reports</span>
               <select
                   className="rows-per-page-selector"
                   value={itemsPerPage}

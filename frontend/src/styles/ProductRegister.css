@@ -1,11 +1,7 @@
 /* General Layout & Page Structure */
 .product-register-container {
-    max-width: 900px; /* Wider container for better layout */
-    margin: 40px auto;
     padding: 25px;
-    background-color: #f9fafb; /* Light background for the page */
     border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern sans-serif font */
     color: #333;
 }
@@ -13,7 +9,6 @@
 /* Page Header */
 .page-header {
     text-align: center;
-    margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e0e6ed; /* Separator line */
     position: relative;
@@ -54,10 +49,8 @@
 
 /* Main Form Card */
 .registration-form-card {
-    background-color: #fff;
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Form Sections */
