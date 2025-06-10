@@ -14,8 +14,6 @@ app.use(express.json()); // This replaces bodyParser.json()
 
 // Define allowed origins with your NEW Vercel URL
 const allowedOrigins = [
-  'http://localhost:3000', // For local frontend development
-  'http://localhost:5173', // If your frontend dev server runs on Vite's default port
   'https://veriglow-r-2tt3.vercel.app', // <-- CRITICAL: UPDATE THIS TO YOUR CURRENT VERGEL URL
   // Add any other specific origins if needed, e.g., another testing domain
 ];
