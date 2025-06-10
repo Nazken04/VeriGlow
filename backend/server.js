@@ -1,28 +1,21 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
-// const bodyParser = require('body-parser'); // <-- REMOVE THIS LINE
 const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
 
-// 1. Place body parsing middleware first, using express.json()
-app.use(express.json()); // This replaces bodyParser.json()
-// app.use(bodyParser.json()); // REMOVE THIS LINE
-
-// Define allowed origins with your NEW Vercel URL
+app.use(express.json()); 
 const allowedOrigins = [
-  'https://veriglow-r-2tt3.vercel.app', // <-- CRITICAL: UPDATE THIS TO YOUR CURRENT VERGEL URL
-  // Add any other specific origins if needed, e.g., another testing domain
+  'http://localhost:3000', // For local frontend development
+  'http://localhost:5173', 
+  'https://veriglow-r-2tt3.vercel.app', 
 ];
 
-// Configure and apply CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, or Postman)
-    // and requests from explicitly allowed origins
     if (!origin || allowedOrigins.includes(origin)) { // Use .includes() for better readability
       callback(null, true); // Allow the request
     } else {
